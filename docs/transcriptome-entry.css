@@ -1,1 +1,3 @@
 .header-actions .transcriptome-entry{display:inline-flex;align-items:center;justify-content:center;color:#286855;background:#edf5f1;border:1px solid #c9ddd3;border-radius:5px;text-decoration:none;font:11px/1.4 "Microsoft YaHei",system-ui,sans-serif;padding:7px 11px;white-space:nowrap}.header-actions .transcriptome-entry:hover{background:#dceee3}@media(max-width:750px){.header-actions .transcriptome-entry{font-size:9px;padding:5px 7px}}
+/* black-navy */
+*{color:#000!important}svg text{fill:#000!important}body{background:#07182e}.app-header{background:#e4effc}.app-body,.graph-workspace{background:#e8f1fc}.expression-panel,.matrix-stage,.calculation-panel{background:#f8fbff}

@@ -60,7 +60,7 @@ docs/transcriptome/为2026-11-06数据拥有者明确要求公开的真实实验
 - 完整全基因整数计数、编码计数、TMM logCPM、元数据、每个基因统计结果及全量结果ZIP均可下载；未合成、抽样或只保留显著基因。
 - 全量表达表分页和搜索；原始/标准化切换；全部样本散点和可调收缩的双基因马氏距离，待测样本排除出参照。二维交互与原1000基因/3PC主分析分别标明。
 - igg45_112主分析保留，去目标仅为事后敏感性。未为更小P筛除组合；未知配对、基因型、年龄、处理、取材/灌流及批次不作推断。供方原报告无FASTQ/BAM/CRAM。
-- 表达JSON按组织gzip压缩，由浏览器DecompressionStream解压；TSV独立可下载。数据字典见docs/transcriptome/downloads/data-dictionary.txt。
+- 网页按512个基因分块读取真实JSON，完整矩阵、整表gzip及TSV仍保留；256个数据块已逐值核对，没有抽样或补零。数据字典见docs/transcriptome/downloads/data-dictionary.txt。
 - 数据拥有者本轮授权公开，不附加数据许可声明；账号、凭据、本机路径和报告内人员姓名不进入新发布包。
 
 node verify-transcriptome.cjs验证数据总量、整数计数、实际样本和二维马氏距离；原OCT验证继续使用node verify-lab.cjs。
