@@ -1,0 +1,512 @@
+[
+  {
+    "file": ".gitattributes",
+    "bytes": 74,
+    "sha256": "228f9c28e468f3efaf12cd6ff77fc36fbd70face5a5bf95823627b8af70a3b3f"
+  },
+  {
+    "file": "analysis-report.html",
+    "bytes": 1120010,
+    "sha256": "7514640abb0db52b035ce56c7adeb486cd9f3b48ad88224bbcc196d6975b9f4f"
+  },
+  {
+    "file": "app.css",
+    "bytes": 6777,
+    "sha256": "296f0cec093e179d4b4c1e3049e1a44f41ab2a0562c61be9a92e29518f428a43"
+  },
+  {
+    "file": "app.js",
+    "bytes": 12001,
+    "sha256": "8753594b6721b88696b5e8441b54af8788ed1d54452f13e7a9e691c5e519a02f"
+  },
+  {
+    "file": "assets/analysis_01_group_geometry.png",
+    "bytes": 174239,
+    "sha256": "f97ee4031709317bf6646f4246fee1414da95a272e6a3b142e8efb7b926eba9f"
+  },
+  {
+    "file": "assets/analysis_02_sample_checks.png",
+    "bytes": 235041,
+    "sha256": "755a16a02afc256b8091e01a3cbda1011f9e2acab54e5392618531b6baec42c7"
+  },
+  {
+    "file": "assets/analysis_03_module_effects.png",
+    "bytes": 160278,
+    "sha256": "b4ba7f00fcb5ec1e5bfe0475fa174207798702cf624b82514b2792513ce90817"
+  },
+  {
+    "file": "assets/analysis_04_dimension_sensitivity.png",
+    "bytes": 128117,
+    "sha256": "99fa72c9099b5d4e926c8fd1709c6c6e3e293e9aa42baf78739a6a21a4cae78e"
+  },
+  {
+    "file": "assets/analysis_05_lacrimal_secretory_profile.png",
+    "bytes": 129500,
+    "sha256": "271591a830d8eecdfc38c6ec8a65ed3a676c2ccf6a2e1da1184845607446e993"
+  },
+  {
+    "file": "assets/audit_01_identity_and_state.png",
+    "bytes": 268136,
+    "sha256": "f166b85c16b5c4912709a7d30cae75d7605841cd4b91fadc9fec48cb08d37d51"
+  },
+  {
+    "file": "assets/audit_02_tissue_identity.png",
+    "bytes": 113464,
+    "sha256": "5bd84bfc046c30fe95f580d81a071c2e13ee7cc35530df42c55c880c4eacfddc"
+  },
+  {
+    "file": "assets/audit_03_technical_QC.png",
+    "bytes": 209950,
+    "sha256": "48bf26e4b5c742a749f6a98034b57ad8377f5aa3f7649aa2c6efdfe1ec9005dd"
+  },
+  {
+    "file": "assets/audit_04_full_vs_omission.png",
+    "bytes": 78506,
+    "sha256": "15790f44491b6272baac46a18041408c5cc35ed84a01bc2255a13901b5fb234b"
+  },
+  {
+    "file": "data/EOM_mouse.json.gz",
+    "bytes": 1930005,
+    "sha256": "3595ac0375dcfba07fca3038cc35bcb7f6134feaafa9f01f8a5c7334cb68ca0e"
+  },
+  {
+    "file": "data/EON_rat.json.gz",
+    "bytes": 1470050,
+    "sha256": "c835bf485aefa0dd07caba8ab986a15af0d071526e784a53f74a8d5acf2b3961"
+  },
+  {
+    "file": "data/LG_mouse.json.gz",
+    "bytes": 1511786,
+    "sha256": "1cac993d96efd2fbf8ee6405932a99487f018dbdb133f925a902e95adcb3b9e3"
+  },
+  {
+    "file": "data/PZ_mouse.json.gz",
+    "bytes": 1986635,
+    "sha256": "e953648870542fc566128caedcb9f090f736fde178518a269b0daa6e1f5709e0"
+  },
+  {
+    "file": "data/summary.json",
+    "bytes": 71747,
+    "sha256": "c8e570ad53bea85a1b64ea4a70807644bad735b1c3f6cc77828c855faed5f0f4"
+  },
+  {
+    "file": "downloads/audit_all_gene_model_comparison.tsv",
+    "bytes": 6318440,
+    "sha256": "a2e6c00adaad2eaf94e6b754c80da7a6ce9a125425c8851c69a39d89573afc54"
+  },
+  {
+    "file": "downloads/audit_all_mouse_sample_correlations.tsv",
+    "bytes": 19518,
+    "sha256": "624e36bc437a858301b2e9596d67a8ea63dc91ea7a5a8116f7356311e2a1e98d"
+  },
+  {
+    "file": "downloads/audit_all_single_leaveout_effects_LG_mouse.tsv",
+    "bytes": 919093,
+    "sha256": "1ad9cb71ffaa94ff5a4f3ca55e7efa5a413bff130604a3fe68beb57a067844d0"
+  },
+  {
+    "file": "downloads/audit_all_single_leaveout_effects_PZ_mouse.tsv",
+    "bytes": 1063401,
+    "sha256": "21bb0978725dc3a592c8a548cc11745974010f703335023426af9b725ecbfbd6"
+  },
+  {
+    "file": "downloads/audit_CAMERA_all_Hallmark.tsv",
+    "bytes": 21939,
+    "sha256": "e63cd85d812ac2e0657db8b23a867c8fc9ff747e29f35b46b40eb3c6343bad63"
+  },
+  {
+    "file": "downloads/audit_Cook_gene_by_sample_LG_mouse.tsv",
+    "bytes": 2892696,
+    "sha256": "41bd74cb71070d15dc60fb2a4100c3743f9d3ec36af629d23a55e2061b2d5b6a"
+  },
+  {
+    "file": "downloads/audit_Cook_gene_by_sample_PZ_mouse.tsv",
+    "bytes": 3644617,
+    "sha256": "06178e334667695bc4a3cdb225e33cce568e3b58b11d8b6f327f4460c9410636"
+  },
+  {
+    "file": "downloads/audit_Cook_sample_summary.tsv",
+    "bytes": 3819,
+    "sha256": "ee8b0e1e8af689baf567b5e8cf8167f0130e72d71fa79e7b3cd763e9e5d08fd8"
+  },
+  {
+    "file": "downloads/audit_cross_model_summary.tsv",
+    "bytes": 190,
+    "sha256": "1d3783932688c2d74f77d84622456a4c5bf7cb503453f44e0afcb717c02fe32c"
+  },
+  {
+    "file": "downloads/audit_cross_tissue_identity.tsv",
+    "bytes": 4853,
+    "sha256": "804efb20cf0bb9021b4e37160c57b5ce02916808daa6421203488fb122016692"
+  },
+  {
+    "file": "downloads/audit_DESeq2_LG_mouse_full.tsv",
+    "bytes": 1690795,
+    "sha256": "85422913fef2489422245f8a4f9e027958b0cd99fc56acaa20ca82f964ed9829"
+  },
+  {
+    "file": "downloads/audit_DESeq2_LG_mouse_omit_igg45_112.tsv",
+    "bytes": 1828394,
+    "sha256": "e1b1c213184a463160a90ec79f020e63f44782af3568bc424e97aad93e9a0a1b"
+  },
+  {
+    "file": "downloads/audit_DESeq2_PZ_mouse_full.tsv",
+    "bytes": 1843450,
+    "sha256": "a46934cfe576f7417b77abaf569d8ecc4b44d3130616bb6dd690929c1f44afc9"
+  },
+  {
+    "file": "downloads/audit_DESeq2_PZ_mouse_omit_igg45_112.tsv",
+    "bytes": 1999362,
+    "sha256": "b23059f0280dec01d6fb809cb9fac8e8a2cf9d247698da185f8af9b58d34a7fe"
+  },
+  {
+    "file": "downloads/audit_diagnostic_gene_expression.tsv",
+    "bytes": 628361,
+    "sha256": "31ef78b8e7d494ece1b4cac62f3d798687fbbca3c029ed1bb0db3e01c878f5cb"
+  },
+  {
+    "file": "downloads/audit_focused_gene_evidence.tsv",
+    "bytes": 4499,
+    "sha256": "3bd39f6ce8ba583054be9713894f1bc8353e236085f9963a85579ecd23225d56"
+  },
+  {
+    "file": "downloads/audit_full_sample_supported_candidates.tsv",
+    "bytes": 75987,
+    "sha256": "9238181d98033d8b3c140d82bf6128f55a41bc0c12cf3bf3d3ccf1e6401f15f0"
+  },
+  {
+    "file": "downloads/audit_logCPM_LG_mouse_full.tsv",
+    "bytes": 2607059,
+    "sha256": "7ae0828132250bcbdebd05729125511570ba7894df6b97cbb166071c9803d476"
+  },
+  {
+    "file": "downloads/audit_logCPM_LG_mouse_omit_igg45_112.tsv",
+    "bytes": 2370029,
+    "sha256": "e1fbd860a4d24befa48d1afb743cd97fbe7a6986a4bce946c6a9d09b56c2e4b4"
+  },
+  {
+    "file": "downloads/audit_logCPM_PZ_mouse_full.tsv",
+    "bytes": 3218602,
+    "sha256": "7ea0c5f13ef07659c5c7b95ce55d967b58caf8bee5184a339b8f8e68dc03a8cb"
+  },
+  {
+    "file": "downloads/audit_logCPM_PZ_mouse_omit_igg45_112.tsv",
+    "bytes": 2955173,
+    "sha256": "dd3748b75d1bfc1847e4904a6ca8393929433d02d164022a41359c105ef39d23"
+  },
+  {
+    "file": "downloads/audit_numerical_validation.tsv",
+    "bytes": 155,
+    "sha256": "b7187e7d8e5fd865b1e84d677b2e7dba361b94beae0e72cfffc09101bf4eda4a"
+  },
+  {
+    "file": "downloads/audit_omission_gains_and_losses.tsv",
+    "bytes": 139,
+    "sha256": "f29d01b545fc1b6af36cdf09788d6a07a73b348193c29bc2e83c191c3ae101ad"
+  },
+  {
+    "file": "downloads/audit_panel_definitions.tsv",
+    "bytes": 9054,
+    "sha256": "61aed7e950a57932599e62b866b4f99c2147cc6130a5f572f212da4cc9f08e49"
+  },
+  {
+    "file": "downloads/audit_panel_scores.tsv",
+    "bytes": 70027,
+    "sha256": "d761af9a22cb4136ddde4b41ef0eb70da846de05d3f028625743a6c79da82e56"
+  },
+  {
+    "file": "downloads/audit_refit_summary.tsv",
+    "bytes": 300,
+    "sha256": "eeba5b5b23cfcabc27c4c4b6bc0b4e580430868f03cd41cf5d913426eebbfb1e"
+  },
+  {
+    "file": "downloads/audit_sex_identity.tsv",
+    "bytes": 1377,
+    "sha256": "121335e9c690d372774444d07cda6051c808aaa370eca5ddcc087927bd840894"
+  },
+  {
+    "file": "downloads/audit_size_factors_LG_mouse_full.tsv",
+    "bytes": 340,
+    "sha256": "06f8bba9ca15b3601c53ae69146020ff62c4d320b4883ba3ff489d2a41c165b1"
+  },
+  {
+    "file": "downloads/audit_size_factors_LG_mouse_omit_igg45_112.tsv",
+    "bytes": 307,
+    "sha256": "0e2723644722eb42ee63ac4dcc65d0c8f5a1200e23694dd381662dc6036f2f74"
+  },
+  {
+    "file": "downloads/audit_size_factors_PZ_mouse_full.tsv",
+    "bytes": 364,
+    "sha256": "39dbef348582af9c7738eef74309f3c09d6871b522b1710e920d8fd787bd10bf"
+  },
+  {
+    "file": "downloads/audit_size_factors_PZ_mouse_omit_igg45_112.tsv",
+    "bytes": 330,
+    "sha256": "62c211da454bbbec451d53fc034a0b642c6d174d42c3c4c1cb7c0ed8f71b3797"
+  },
+  {
+    "file": "downloads/audit_target_group_proximity.tsv",
+    "bytes": 2066,
+    "sha256": "562e507056244d4098724e68ce5f2544c037d9f3d1e0b65e76168ddc4de3c88c"
+  },
+  {
+    "file": "downloads/audit_target_nearest_neighbors.tsv",
+    "bytes": 8120,
+    "sha256": "feab90c95142211f5aea610d0cb9e303d2f3f51a832d5a8382aeb5d68248ff83"
+  },
+  {
+    "file": "downloads/audit_target_panel_comparisons.tsv",
+    "bytes": 10013,
+    "sha256": "05c714bf9825120870e5e0642a829f0bfef5e96236c74b14ba6cc47f6ff3c87b"
+  },
+  {
+    "file": "downloads/audit_target_vs_male_peers_genes.tsv",
+    "bytes": 3268728,
+    "sha256": "3a5bce139224af7a8503ecc72e076125f31d5f5b3101c9c9e9781b1b3c54ff28"
+  },
+  {
+    "file": "downloads/audit_technical_QC.tsv",
+    "bytes": 8137,
+    "sha256": "cedc447c680b3cc2088ff6445dcd58d4fe7494a14cdcb5b8a467f4f3ea2648ac"
+  },
+  {
+    "file": "downloads/audit_voom_sample_weights.tsv",
+    "bytes": 2100,
+    "sha256": "98133ed8e8390506d91cad4890a6ecf4c09ef0918598df6cd658b0a048e878e4"
+  },
+  {
+    "file": "downloads/audit_voomQualityWeights_LG_mouse_full.tsv",
+    "bytes": 1492130,
+    "sha256": "f16a0680a1e88f4ce0897c0c1219deec6f4e9452ca0b007d246a10b950a21cea"
+  },
+  {
+    "file": "downloads/audit_voomQualityWeights_LG_mouse_omit_igg45_112.tsv",
+    "bytes": 1619393,
+    "sha256": "f34ee9bebfb0fb5e316e983a7a54796dd5dbd12cb3e79807cf8e735dd2e568d2"
+  },
+  {
+    "file": "downloads/audit_voomQualityWeights_PZ_mouse_full.tsv",
+    "bytes": 1461950,
+    "sha256": "43eb0499b7b776e027b44236bc2b61a6567285370863bbe5bc1fbe46763a9e07"
+  },
+  {
+    "file": "downloads/audit_voomQualityWeights_PZ_mouse_omit_igg45_112.tsv",
+    "bytes": 1851491,
+    "sha256": "079bf31a0046499de2df06020ea7af1107aa2cd2b0ea03a93132d50233410ed9"
+  },
+  {
+    "file": "downloads/complete-expression-and-results.zip",
+    "bytes": 27039239,
+    "sha256": "a440233b6dcbaced97c6945e63c0be5078e1b4f0c474c156d02075aa440fd4ca"
+  },
+  {
+    "file": "downloads/data-dictionary.txt",
+    "bytes": 2010,
+    "sha256": "c7498bc43cf1612322fa388846b99a1a91b03ac5076db976b65d3b8a62b443cd"
+  },
+  {
+    "file": "downloads/deletion_sensitivity.tsv",
+    "bytes": 2050,
+    "sha256": "d2da5a928f75dcdcaf2a456f5b8d543200bbb17bcf76a2fbc970571c138d0cb3"
+  },
+  {
+    "file": "downloads/descriptive_module_sex_groups.tsv",
+    "bytes": 5590,
+    "sha256": "ca277ccf360694ade16294563f4e35835037971f2efe97618c26719a5587bba5"
+  },
+  {
+    "file": "downloads/dimension_sensitivity.tsv",
+    "bytes": 2975,
+    "sha256": "29c21ce1df99854bc18c90084d717d4c5eb41654ac4d3b3d971ceb8c48d0665e"
+  },
+  {
+    "file": "downloads/EOM_mouse_all_gene_counts.tsv",
+    "bytes": 1555914,
+    "sha256": "64be26e6631e0ce17f4eb61982b52f7d06fcba1e56e6f603cd824a8b5f6753e5"
+  },
+  {
+    "file": "downloads/EOM_mouse_coding_counts.tsv",
+    "bytes": 1085820,
+    "sha256": "223f3e60b920bf2523b1c9b6c631ab65ef67515b6758ee8b38d85ce4705648cb"
+  },
+  {
+    "file": "downloads/EOM_mouse_TMM_logCPM.tsv",
+    "bytes": 3558418,
+    "sha256": "4838766acebb74689995818cfafb2c866a7d6f854828cfbbe6f06c888cca1a65"
+  },
+  {
+    "file": "downloads/EON_rat_all_gene_counts.tsv",
+    "bytes": 964941,
+    "sha256": "07838f8cc6643d4a59a3e4ae7eaa04679882d93c24a0e9f3f3cc06fca6be7708"
+  },
+  {
+    "file": "downloads/EON_rat_coding_counts.tsv",
+    "bytes": 789010,
+    "sha256": "6b3e19de603f3fed9ff90504b2d43c5228e6d9dbff50353685061bc8e0940c0a"
+  },
+  {
+    "file": "downloads/EON_rat_TMM_logCPM.tsv",
+    "bytes": 2723481,
+    "sha256": "e2b24ac1a3169b0b289165ef40421750df05af7533a280d972b3c0c5af488388"
+  },
+  {
+    "file": "downloads/exact_permutation_null.tsv",
+    "bytes": 31885,
+    "sha256": "262f523d4ccad2ff1a7c3a84cdc33f94d89fc9cf05808b45e8376ed0b1365098"
+  },
+  {
+    "file": "downloads/gene_distance_attribution.tsv",
+    "bytes": 194617,
+    "sha256": "66cc5f90445ff782927154b4cb2117ce238539a59e8467fdc6984aa6267a244d"
+  },
+  {
+    "file": "downloads/joint_module_attribution.tsv",
+    "bytes": 672,
+    "sha256": "2b8e44a7960a3a2e84d0142cc307ec14e7381927e6bae0d428fef105d621f579"
+  },
+  {
+    "file": "downloads/joint_module_tests.tsv",
+    "bytes": 490,
+    "sha256": "c4f45409f4aeea879be3dbcaa8d1c65ec816477d69371187b771d4f063eb700d"
+  },
+  {
+    "file": "downloads/LG_mouse_all_gene_counts.tsv",
+    "bytes": 1372524,
+    "sha256": "4f9fb8aa687182b6221fc9eb54d27496ae32035d907ebcdc0250d5585adc91ed"
+  },
+  {
+    "file": "downloads/LG_mouse_coding_counts.tsv",
+    "bytes": 939374,
+    "sha256": "7dd765dff10e4f634038e865f456feba89e3475e3b1b16582c714604c66b6794"
+  },
+  {
+    "file": "downloads/LG_mouse_TMM_logCPM.tsv",
+    "bytes": 2851847,
+    "sha256": "63dc162eab3ed06c85c907dfa3f79f8cca46fee0a0a3132ea8d65500672c6487"
+  },
+  {
+    "file": "downloads/loo_sample_distances_all_settings.tsv",
+    "bytes": 34277,
+    "sha256": "1ce4156a824b8a778efee46a801b78c18025d359ac545bf77ac113d20214c636"
+  },
+  {
+    "file": "downloads/loo_sample_distances_primary.tsv",
+    "bytes": 4262,
+    "sha256": "d95698efdaddab3c8a095289dd35318694cc614c91cded9bd06c7d92a815898e"
+  },
+  {
+    "file": "downloads/module_definitions_and_coverage.tsv",
+    "bytes": 9479,
+    "sha256": "69f2c6c55fd18be48a8e7473b0f3fb7658565db2ad136682a001a9cddf1e8ab2"
+  },
+  {
+    "file": "downloads/module_effects.tsv",
+    "bytes": 5388,
+    "sha256": "724753f4cb49f5f6cecf2b4996c8e0e66096caeba31ae476bb3064627dff4350"
+  },
+  {
+    "file": "downloads/module_scores_EOM_mouse.tsv",
+    "bytes": 4221,
+    "sha256": "fbdae058d4bdcf2c9027cf90db901cb4d28c8e59fccc7b938c8c798ef889afb8"
+  },
+  {
+    "file": "downloads/module_scores_EON_rat.tsv",
+    "bytes": 2831,
+    "sha256": "83513d453ce7a4c8635248bbbf67b6e06662027b48e4a0cec4ffdeba2882fe4b"
+  },
+  {
+    "file": "downloads/module_scores_LG_mouse.tsv",
+    "bytes": 3431,
+    "sha256": "d49da26b81856af0b9d214773ca58b967ff5ebeb042dd23f4cfe364022486162"
+  },
+  {
+    "file": "downloads/module_scores_PZ_mouse.tsv",
+    "bytes": 4207,
+    "sha256": "062576ca452d55fd7aed6f0466c20a1b70745b3231f95be79bc7a66349a34025"
+  },
+  {
+    "file": "downloads/naive_pseudoinverse_diagnostic.tsv",
+    "bytes": 298,
+    "sha256": "a0a7569aca3ac33432819e01236326fce21111b4f04874c2a60df1c19351d773"
+  },
+  {
+    "file": "downloads/numerical_audit.tsv",
+    "bytes": 309,
+    "sha256": "940d3a89b2bcb7a3e1f5e19549e6de2a1cbc54b38d4b6a8fe832d6486e19ea2b"
+  },
+  {
+    "file": "downloads/PCA_coordinates.tsv",
+    "bytes": 3190,
+    "sha256": "4cd31d0685c8a5de7352dc6a2d8a8b67baefcdd037ed179b310a483183e51217"
+  },
+  {
+    "file": "downloads/posthoc_covariance_methods.tsv",
+    "bytes": 1212,
+    "sha256": "78663d9ecde85a8396942256b060edf95aac7ed4db05062a56ec65ca28c74f5d"
+  },
+  {
+    "file": "downloads/posthoc_joint_module_deletions.tsv",
+    "bytes": 2000,
+    "sha256": "d78273eade9b8451b1d85188d91bbe980964dd93e2284d9e1fd9a3d4e0bdfc48"
+  },
+  {
+    "file": "downloads/posthoc_joint_module_variants.tsv",
+    "bytes": 1104,
+    "sha256": "7af3fa9178bcdb1dbd6db3070f43b7a0f8768114c59c194d971d9adeb6ac4d75"
+  },
+  {
+    "file": "downloads/posthoc_lacrimal_secretory_expression.tsv",
+    "bytes": 1112,
+    "sha256": "17e06b9f3cf87c8b1c69eeacf4faa8ac8546f7f72b37908e3596511192fe9734"
+  },
+  {
+    "file": "downloads/primary_group_tests.tsv",
+    "bytes": 429,
+    "sha256": "00b482ceecd3aebc7b2032e64674cdb26cc57bb584749b5b1ac957afab9f7416"
+  },
+  {
+    "file": "downloads/PZ_mouse_all_gene_counts.tsv",
+    "bytes": 1598254,
+    "sha256": "9c198262d398559e8ce009ef36c87dd807bccbe0aa2b05c9e6153a7fdf8bbd57"
+  },
+  {
+    "file": "downloads/PZ_mouse_coding_counts.tsv",
+    "bytes": 1122256,
+    "sha256": "c53b64b72d47de5d972e38c942eff141918ba08deb44278623984d3079d25e13"
+  },
+  {
+    "file": "downloads/PZ_mouse_TMM_logCPM.tsv",
+    "bytes": 3532263,
+    "sha256": "46af8346227399f97db5a6582506acd61b99b0d80cd97751a5c73e7dc5a875d5"
+  },
+  {
+    "file": "downloads/sample_metadata.tsv",
+    "bytes": 2409,
+    "sha256": "aaef993da30701280eb42570fe1d1b9cb9b75762c0facbcb86deb6da32fcb370"
+  },
+  {
+    "file": "downloads/sample_sequencing_QC.tsv",
+    "bytes": 6334,
+    "sha256": "63440ab3938fd458f4cc853df19e49384c2a0449a92da31123c80639c3d74dfe"
+  },
+  {
+    "file": "downloads/selected_gene_expression.tsv",
+    "bytes": 19178,
+    "sha256": "1d47270ced3f98bf2c358767f3d62bff0bfca2a7fb2fb3be170bb650935e1c9e"
+  },
+  {
+    "file": "index.html",
+    "bytes": 7213,
+    "sha256": "5cc49d880d03aea9eec2078c9d2ad1d77a68a798050aa2718178005fb7342f46"
+  },
+  {
+    "file": "math.js",
+    "bytes": 938,
+    "sha256": "eaec735873c464b6fadcc83aa755b50bd912f05240d310ef32872bf7203eda1e"
+  },
+  {
+    "file": "sample-audit.html",
+    "bytes": 1018108,
+    "sha256": "36267c05ac264c4f008b475ccf83ec92f9a2356b5c69c3f44dcbb3e4a0ef25ad"
+  }
+]

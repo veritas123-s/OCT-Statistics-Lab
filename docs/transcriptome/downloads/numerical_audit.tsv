@@ -1,0 +1,5 @@
+dataset	primary_D2_reconstructed	max_D2_difference	rotation_invariant	exact_p_recount
+EOM_mouse	2.52255617072	5.14255305006e-12	True	0.095
+LG_mouse	11.4352101433	1.54845025691e-11	True	0.005
+PZ_mouse	5.57754372301	3.10773629053e-12	True	0.005
+EON_rat	4.65103658279	1.67954539165e-12	True	0.0634920634921

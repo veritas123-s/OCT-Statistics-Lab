@@ -1,0 +1,5 @@
+dataset	scenario	n_samples	n_disease	n_NC	n_filtered_genes	n_zeroFDR05	n_zeroFDR05_and_absLFC1	n_formal_absLFC_gt1_FDR05
+LG_mouse	full	11	6	5	13273	1658	639	87
+LG_mouse	omit_igg45_112	10	5	5	13230	1842	707	119
+PZ_mouse	full	12	6	6	15140	849	110	4
+PZ_mouse	omit_igg45_112	11	5	6	15116	788	133	11

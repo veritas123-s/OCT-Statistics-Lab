@@ -1,0 +1,53 @@
+dataset	module	n_genes	genes	rat_caution
+EOM_mouse	myeloid	5	Ptprc,Lyz2,Adgre1,Csf1r,Aif1	
+EOM_mouse	type2_myeloid	7	Retnla,Mgl2,Ccl8,Ccl12,Chil3,Mrc1,Cd163	
+EOM_mouse	B_cell	3	Ms4a1,Cd79a,Cd79b	
+EOM_mouse	plasma_cell	5	Jchain,Mzb1,Sdc1,Xbp1,Derl3	
+EOM_mouse	matrix	7	Col1a1,Col1a2,Col3a1,Col5a1,Acta2,Tagln,Postn	
+EOM_mouse	complement	3	C1qa,C1qb,C1qc	
+EOM_mouse	RBC	7	Hba-a1,Hba-a2,Hbb-bs,Hbb-bt,Alas2,Slc4a1,Gypa	
+EOM_mouse	muscle	17	Myh3,Myh1,Myh2,Myh4,Myh7,Myog,Myod1,Tnnt1,Tnnt3,Tnni1,Tnni2,Acta1,Myl1,Mylpf,Klhl40,Capn3,Trim63	
+EOM_mouse	myelin	6	Mbp,Plp1,Mog,Mag,Cnp,Mobp	
+EOM_mouse	axon	5	Nefl,Nefm,Nefh,Tubb3,Snap25	
+EOM_mouse	acute_stress	6	Fos,Jun,Fkbp5,Ddit4,Egr1,Atf3	
+EOM_mouse	IFNa	90	Adar,B2m,Batf2,Bst2,C1s1,Casp1,Casp8,Ccrl2,Cd47,Cd74,Cmpk2,Cmtr1,Cnp,Csf1,Cxcl10,Ddx60,Dhx58,Eif2ak2,Elf1,Epsti1,Gbp3,Gmpr,Helz2,Herc6,Ifi27,Ifi30,Ifi35,Ifi44,Ifih1,Ifit2,Ifit3,Ifitm1,Ifitm2,Ifitm3,Il15,Il4ra,Il7,Irf1,Irf2,Irf7,Irf9,Isg15,Isg20,Lap3,Lgals3bp,Lpar6,Ly6e,Mov10,Mvb12a,Ncoa7,Nmi,Nub1,Oas1a,Oasl1,Ogfr,Parp12,Parp14,Parp9,Plscr1,Pnpt1,Procr,Psma3,Psmb8,Psmb9,Psme1,Psme2,Ripk2,Rnf31,Rsad2,Rtp4,Samd9l,Sell,Slc25a28,Sp110,Stat2,Tap1,Tdrd7,Tent5a,Tmem140,Trafd1,Trim12c,Trim14,Trim21,Trim25,Trim26,Txnip,Uba7,Ube2l6,Usp18,Wars1	
+EOM_mouse	IFNg	181	Adar,Apol6,Arid5b,Arl4a,Auts2,B2m,Bank1,Batf2,Bpgm,Bst2,Btg1,C1s1,Casp1,Casp3,Casp4,Casp7,Casp8,Ccl5,Ccl7,Cd274,Cd38,Cd40,Cd69,Cd74,Cd86,Cdkn1a,Cfb,Cfh,Ciita,Cmklr1,Cmpk2,Cmtr1,Cxcl10,Cxcl9,Ddx60,Dhx58,Eif2ak2,Eif4e3,Epsti1,Fas,Fcgr1,Fgl2,Fpr1,Gbp3,Gch1,Gzma,H2-Aa,H2-DMa,Helz2,Herc6,Hif1a,Icam1,Ido1,Ifi27,Ifi30,Ifi35,Ifi44,Ifih1,Ifit2,Ifit3,Ifitm2,Ifitm3,Ifnar2,Il10ra,Il15,Il15ra,Il18bp,Il2rb,Il4ra,Il7,Irf1,Irf2,Irf4,Irf5,Irf7,Irf8,Irf9,Isg15,Isg20,Isoc1,Itgb7,Jak2,Lap3,Lats2,Lcp2,Lgals3bp,Ly6e,Lysmd2,Marchf1,Mthfd2,Mvp,Myd88,Nampt,Ncoa3,Nfkb1,Nfkbia,Nlrc5,Nmi,Nod1,Nup93,Oas2,Oas3,Oasl1,Ogfr,P2ry14,Parp12,Parp14,Pde4b,Peli1,Pfkp,Pim1,Pla2g4a,Plscr1,Pml,Pnp,Pnpt1,Psma2,Psma3,Psmb10,Psmb2,Psmb8,Psmb9,Psme1,Psme2,Ptgs2,Ptpn1,Ptpn2,Ptpn6,Rapgef6,Rbck1,Rigi,Ripk1,Ripk2,Rnf213,Rnf31,Rsad2,Rtp4,Samd9l,Samhd1,Sectm1a,Selp,Serping1,Slamf7,Slc25a28,Socs1,Socs3,Sod2,Sp110,Sppl2a,Sri,Sspn,St3gal5,St8sia4,Stat1,Stat2,Stat3,Stat4,Tap1,Tapbp,Tdrd7,Tnfaip2,Tnfaip3,Tnfaip6,Tnfsf10,Tor1b,Trafd1,Trim14,Trim21,Trim25,Trim26,Txnip,Ube2l6,Upp1,Usp18,Vamp5,Vamp8,Vcam1,Wars1,Xaf1,Zbp1,Znfx1	
+LG_mouse	myeloid	5	Ptprc,Lyz2,Adgre1,Csf1r,Aif1	
+LG_mouse	type2_myeloid	7	Retnla,Mgl2,Ccl8,Ccl12,Chil3,Mrc1,Cd163	
+LG_mouse	B_cell	1	Cd79b	
+LG_mouse	plasma_cell	5	Jchain,Mzb1,Sdc1,Xbp1,Derl3	
+LG_mouse	matrix	7	Col1a1,Col1a2,Col3a1,Col5a1,Acta2,Tagln,Postn	
+LG_mouse	complement	3	C1qa,C1qb,C1qc	
+LG_mouse	RBC	5	Hba-a1,Hba-a2,Hbb-bs,Hbb-bt,Alas2	
+LG_mouse	muscle	10	Myh1,Myh4,Tnnt1,Tnnt3,Tnni2,Acta1,Myl1,Mylpf,Klhl40,Capn3	
+LG_mouse	myelin	3	Mbp,Plp1,Cnp	
+LG_mouse	axon	1	Nefh	
+LG_mouse	acute_stress	6	Fos,Jun,Fkbp5,Ddit4,Egr1,Atf3	
+LG_mouse	IFNa	90	Adar,B2m,Batf2,Bst2,C1s1,Casp1,Casp8,Ccrl2,Cd47,Cd74,Cmpk2,Cmtr1,Cnp,Csf1,Cxcl10,Ddx60,Dhx58,Eif2ak2,Elf1,Epsti1,Gbp3,Gmpr,Helz2,Herc6,Ifi27,Ifi30,Ifi35,Ifi44,Ifih1,Ifit2,Ifit3,Ifitm1,Ifitm2,Ifitm3,Il15,Il4ra,Il7,Irf1,Irf2,Irf7,Irf9,Isg15,Isg20,Lap3,Lgals3bp,Lpar6,Ly6e,Mov10,Mvb12a,Ncoa7,Nmi,Nub1,Oas1a,Oasl1,Ogfr,Parp12,Parp14,Parp9,Plscr1,Pnpt1,Procr,Psma3,Psmb8,Psmb9,Psme1,Psme2,Ripk2,Rnf31,Rsad2,Rtp4,Samd9l,Sell,Slc25a28,Sp110,Stat2,Tap1,Tdrd7,Tent5a,Tmem140,Trafd1,Trim12c,Trim14,Trim21,Trim25,Trim26,Txnip,Uba7,Ube2l6,Usp18,Wars1	
+LG_mouse	IFNg	177	Adar,Apol6,Arid5b,Arl4a,Auts2,B2m,Batf2,Bpgm,Bst2,Btg1,C1s1,Casp1,Casp3,Casp4,Casp7,Casp8,Ccl5,Ccl7,Cd274,Cd38,Cd40,Cd69,Cd74,Cd86,Cdkn1a,Cfb,Cfh,Ciita,Cmklr1,Cmpk2,Cmtr1,Cxcl10,Cxcl9,Ddx60,Dhx58,Eif2ak2,Eif4e3,Epsti1,Fas,Fcgr1,Fgl2,Gbp3,Gch1,Gzma,H2-Aa,H2-DMa,Helz2,Herc6,Hif1a,Icam1,Ifi27,Ifi30,Ifi35,Ifi44,Ifih1,Ifit2,Ifit3,Ifitm2,Ifitm3,Ifnar2,Il10ra,Il15,Il15ra,Il18bp,Il2rb,Il4ra,Il7,Irf1,Irf2,Irf4,Irf5,Irf7,Irf8,Irf9,Isg15,Isg20,Isoc1,Itgb7,Jak2,Lap3,Lats2,Lcp2,Lgals3bp,Ly6e,Lysmd2,Marchf1,Mthfd2,Mvp,Myd88,Nampt,Ncoa3,Nfkb1,Nfkbia,Nlrc5,Nmi,Nod1,Nup93,Oas2,Oas3,Oasl1,Ogfr,P2ry14,Parp12,Parp14,Pde4b,Peli1,Pfkp,Pim1,Pla2g4a,Plscr1,Pml,Pnp,Pnpt1,Psma2,Psma3,Psmb10,Psmb2,Psmb8,Psmb9,Psme1,Psme2,Ptpn1,Ptpn2,Ptpn6,Rapgef6,Rbck1,Rigi,Ripk1,Ripk2,Rnf213,Rnf31,Rsad2,Rtp4,Samd9l,Samhd1,Sectm1a,Selp,Serping1,Slamf7,Slc25a28,Socs1,Socs3,Sod2,Sp110,Sppl2a,Sri,Sspn,St3gal5,St8sia4,Stat1,Stat2,Stat3,Stat4,Tap1,Tapbp,Tdrd7,Tnfaip2,Tnfaip3,Tnfaip6,Tnfsf10,Tor1b,Trafd1,Trim14,Trim21,Trim25,Trim26,Txnip,Ube2l6,Upp1,Usp18,Vamp5,Vamp8,Vcam1,Wars1,Xaf1,Zbp1,Znfx1	
+PZ_mouse	myeloid	5	Ptprc,Lyz2,Adgre1,Csf1r,Aif1	
+PZ_mouse	type2_myeloid	7	Retnla,Mgl2,Ccl8,Ccl12,Chil3,Mrc1,Cd163	
+PZ_mouse	B_cell	2	Cd79a,Cd79b	
+PZ_mouse	plasma_cell	3	Sdc1,Xbp1,Derl3	
+PZ_mouse	matrix	7	Col1a1,Col1a2,Col3a1,Col5a1,Acta2,Tagln,Postn	
+PZ_mouse	complement	3	C1qa,C1qb,C1qc	
+PZ_mouse	RBC	6	Hba-a1,Hba-a2,Hbb-bs,Hbb-bt,Alas2,Slc4a1	
+PZ_mouse	muscle	13	Myh3,Myh1,Myh2,Myh4,Myh7,Tnnt1,Tnni1,Tnni2,Acta1,Myl1,Mylpf,Klhl40,Capn3	
+PZ_mouse	myelin	6	Mbp,Plp1,Mog,Mag,Cnp,Mobp	
+PZ_mouse	axon	5	Nefl,Nefm,Nefh,Tubb3,Snap25	
+PZ_mouse	acute_stress	6	Fos,Jun,Fkbp5,Ddit4,Egr1,Atf3	
+PZ_mouse	IFNa	88	Adar,B2m,Bst2,C1s1,Casp1,Casp8,Ccrl2,Cd47,Cd74,Cmpk2,Cmtr1,Cnp,Csf1,Cxcl10,Ddx60,Dhx58,Eif2ak2,Elf1,Epsti1,Gbp3,Gmpr,Helz2,Herc6,Ifi27,Ifi30,Ifi35,Ifi44,Ifih1,Ifit2,Ifit3,Ifitm1,Ifitm2,Ifitm3,Il15,Il4ra,Irf1,Irf2,Irf7,Irf9,Isg15,Isg20,Lamp3,Lap3,Lgals3bp,Lpar6,Ly6e,Mov10,Mvb12a,Ncoa7,Nmi,Nub1,Oas1a,Oasl1,Ogfr,Parp12,Parp14,Parp9,Plscr1,Pnpt1,Procr,Psma3,Psmb8,Psmb9,Psme1,Psme2,Ripk2,Rnf31,Rsad2,Rtp4,Samd9l,Slc25a28,Sp110,Stat2,Tap1,Tdrd7,Tent5a,Tmem140,Trafd1,Trim12c,Trim14,Trim21,Trim25,Trim26,Txnip,Uba7,Ube2l6,Usp18,Wars1	
+PZ_mouse	IFNg	168	Adar,Arid5b,Arl4a,Auts2,B2m,Bank1,Bpgm,Bst2,Btg1,C1s1,Casp1,Casp3,Casp4,Casp7,Casp8,Cd274,Cd38,Cd40,Cd74,Cd86,Cdkn1a,Cfb,Cfh,Cmklr1,Cmpk2,Cmtr1,Cxcl10,Ddx60,Dhx58,Eif2ak2,Eif4e3,Epsti1,Fas,Fcgr1,Fgl2,Gbp3,Gch1,H2-Aa,H2-DMa,Helz2,Herc6,Hif1a,Icam1,Ido1,Ifi27,Ifi30,Ifi35,Ifi44,Ifih1,Ifit2,Ifit3,Ifitm2,Ifitm3,Ifnar2,Il10ra,Il15,Il15ra,Il18bp,Il2rb,Il4ra,Irf1,Irf2,Irf4,Irf5,Irf7,Irf8,Irf9,Isg15,Isg20,Isoc1,Itgb7,Jak2,Lap3,Lats2,Lcp2,Lgals3bp,Ly6e,Lysmd2,Marchf1,Mthfd2,Mvp,Myd88,Nampt,Ncoa3,Nfkb1,Nfkbia,Nlrc5,Nmi,Nod1,Nup93,Oas2,Oasl1,Ogfr,P2ry14,Parp12,Parp14,Pde4b,Peli1,Pfkp,Pim1,Pla2g4a,Plscr1,Pml,Pnp,Pnpt1,Psma2,Psma3,Psmb10,Psmb2,Psmb8,Psmb9,Psme1,Psme2,Ptgs2,Ptpn1,Ptpn2,Ptpn6,Rapgef6,Rbck1,Rigi,Ripk1,Ripk2,Rnf213,Rnf31,Rsad2,Rtp4,Samd9l,Samhd1,Selp,Serping1,Slc25a28,Socs1,Socs3,Sod2,Sp110,Sppl2a,Sri,Sspn,St3gal5,St8sia4,Stat1,Stat2,Stat3,Stat4,Tap1,Tapbp,Tdrd7,Tnfaip2,Tnfaip3,Tnfaip6,Tnfsf10,Tor1b,Trafd1,Trim14,Trim21,Trim25,Trim26,Txnip,Ube2l6,Upp1,Usp18,Vamp5,Vamp8,Vcam1,Wars1,Xaf1,Zbp1,Znfx1	
+EON_rat	myeloid	5	Ptprc,Lyz2,Adgre1,Csf1r,Aif1	mouse IFN panels are provisional symbol matches
+EON_rat	type2_myeloid	3	Ccl12,Mrc1,Cd163	mouse IFN panels are provisional symbol matches
+EON_rat	B_cell	1	Cd79a	mouse IFN panels are provisional symbol matches
+EON_rat	plasma_cell	5	Jchain,Mzb1,Sdc1,Xbp1,Derl3	mouse IFN panels are provisional symbol matches
+EON_rat	matrix	7	Col1a1,Col1a2,Col3a1,Col5a1,Acta2,Tagln,Postn	mouse IFN panels are provisional symbol matches
+EON_rat	complement	3	C1qa,C1qb,C1qc	mouse IFN panels are provisional symbol matches
+EON_rat	RBC	6	Hba-a1,Hba-a2,Hbb-bs,Alas2,Slc4a1,Gypa	mouse IFN panels are provisional symbol matches
+EON_rat	muscle	16	Myh3,Myh1,Myh2,Myh4,Myh7,Myog,Myod1,Tnnt1,Tnnt3,Tnni1,Tnni2,Acta1,Myl1,Klhl40,Capn3,Trim63	mouse IFN panels are provisional symbol matches
+EON_rat	myelin	6	Mbp,Plp1,Mog,Mag,Cnp,Mobp	mouse IFN panels are provisional symbol matches
+EON_rat	axon	5	Nefl,Nefm,Nefh,Tubb3,Snap25	mouse IFN panels are provisional symbol matches
+EON_rat	acute_stress	6	Fos,Jun,Fkbp5,Ddit4,Egr1,Atf3	mouse IFN panels are provisional symbol matches
+EON_rat	IFNa	86	Adar,B2m,Bst2,Casp1,Casp8,Ccrl2,Cd47,Cd74,Cmpk2,Cmtr1,Cnp,Csf1,Cxcl10,Cxcl11,Ddx60,Dhx58,Eif2ak2,Elf1,Epsti1,Gmpr,Helz2,Herc6,Ifi27,Ifi30,Ifi35,Ifi44,Ifi44l,Ifih1,Ifit2,Ifit3,Ifitm1,Ifitm2,Ifitm3,Il15,Il7,Irf1,Irf2,Irf7,Irf9,Isg15,Isg20,Lap3,Lgals3bp,Lpar6,Ly6e,Mov10,Mvb12a,Mx2,Ncoa7,Nmi,Nub1,Oas1a,Ogfr,Parp12,Parp14,Parp9,Plscr1,Pnpt1,Procr,Psma3,Psmb8,Psmb9,Psme1,Psme2,Ripk2,Rnf31,Rsad2,Rtp4,Sell,Slc25a28,Sp110,Stat2,Tap1,Tdrd7,Tent5a,Tmem140,Trafd1,Trim14,Trim21,Trim25,Trim26,Txnip,Uba7,Ube2l6,Usp18,Wars1	mouse IFN panels are provisional symbol matches
+EON_rat	IFNg	169	Adar,Arid5b,Arl4a,Auts2,B2m,Bpgm,Bst2,Btg1,Casp1,Casp3,Casp4,Casp7,Casp8,Ccl5,Ccl7,Cd274,Cd38,Cd40,Cd74,Cd86,Cdkn1a,Cfb,Cfh,Ciita,Cmklr1,Cmpk2,Cmtr1,Cxcl10,Cxcl11,Cxcl9,Ddx60,Dhx58,Eif2ak2,Eif4e3,Epsti1,Fas,Fgl2,Gch1,Gpr18,Helz2,Herc6,Hif1a,Icam1,Ifi27,Ifi30,Ifi35,Ifi44,Ifi44l,Ifih1,Ifit2,Ifit3,Ifitm2,Ifitm3,Ifnar2,Il10ra,Il15,Il15ra,Il18bp,Il2rb,Il7,Irf1,Irf2,Irf4,Irf5,Irf7,Irf8,Irf9,Isg15,Isg20,Isoc1,Itgb7,Jak2,Lap3,Lats2,Lcp2,Lgals3bp,Ly6e,Lysmd2,Marchf1,Mthfd2,Mvp,Mx2,Myd88,Nampt,Ncoa3,Nfkb1,Nfkbia,Nlrc5,Nmi,Nod1,Nup93,Oas2,Oas3,Ogfr,P2ry14,Parp12,Parp14,Pde4b,Peli1,Pfkp,Pim1,Pla2g4a,Plscr1,Pml,Pnp,Pnpt1,Psma2,Psma3,Psmb10,Psmb2,Psmb8,Psmb9,Psme1,Psme2,Ptgs2,Ptpn1,Ptpn2,Ptpn6,Rapgef6,Rbck1,Ripk1,Ripk2,Rnf213,Rnf31,Rsad2,Rtp4,Samhd1,Sectm1a,Selp,Serping1,Slamf7,Slc25a28,Socs1,Socs3,Sod2,Sp110,Sppl2a,Sri,Sspn,St3gal5,St8sia4,Stat1,Stat2,Stat3,Stat4,Tap1,Tapbp,Tdrd7,Tnfaip2,Tnfaip3,Tnfaip6,Tnfsf10,Tor1b,Trafd1,Trim14,Trim21,Trim25,Trim26,Txnip,Ube2l6,Upp1,Usp18,Vamp5,Vamp8,Vcam1,Wars1,Xaf1,Zbp1,Znfx1	mouse IFN panels are provisional symbol matches

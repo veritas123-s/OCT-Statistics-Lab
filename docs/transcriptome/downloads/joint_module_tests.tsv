@@ -1,0 +1,5 @@
+dataset	D	D2	p_exact	n_allocations	shrinkage	modules	FDR_BH_4
+EOM_mouse	4.96482046547	24.6494422544	0.005	400	0.235092135935	IFNa,IFNg,plasma_cell,myeloid,matrix	0.02
+LG_mouse	1.53624222332	2.3600401687	0.32	200	0.320812832399	IFNa,IFNg,plasma_cell,myeloid,matrix	0.32
+PZ_mouse	1.49690390561	2.24072130262	0.12	400	0.654843050898	IFNa,IFNg,plasma_cell,myeloid,matrix	0.16
+EON_rat	2.56165055033	6.56205354199	0.0873015873016	126	0.223461855625	IFNa,IFNg,plasma_cell,myeloid,matrix	0.16
