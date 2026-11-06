@@ -1,6 +1,6 @@
 (function(){
   'use strict';
-  const $=id=>document.getElementById(id), SOURCE=window.OCT_SOURCE, engine=window.OctStats;
+  const $=id=>document.getElementById(id), SOURCE=window.OCT_SOURCE, CFG=window.OCT_DATASET, engine=window.OctStats;
   const esc=s=>String(s??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fmt=(v,p=4)=>v===null||!Number.isFinite(v)?'—':(Math.abs(v)<.5*10**(-p)?0:v).toFixed(p);
   const f2=v=>fmt(v,2),f4=v=>fmt(v,4),f6=v=>fmt(v,6),sum=engine.sum;
@@ -9,10 +9,11 @@
   const table=(heads,rows,totals)=>`<div class="calc-table-wrap"><table class="calc-table"><thead><tr>${heads.map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(row).join('')}</tbody>${totals?`<tfoot>${row(totals)}</tfoot>`:''}</table></div>`;
   const eq=s=>`<div class="calc-equation">${s}</div>`,note=s=>`<p class="calc-note">${s}</p>`;
   const signed=values=>values.map((v,i)=>`${i?(v<0?' − ':' + '):(v<0?'−':'')}${f2(Math.abs(v))}`).join('');
-  const fromSource=record=>{const v=record.values;return{key:`${v[0]}:${v[1]}`,id:v[0],side:v[1],label:`${v[0].replace('Patient-','P').replace('Control-','C')} ${v[1]==='right'?'R':'L'}`,x:v[10],y:v[11],originalX:v[10],originalY:v[11],sourceRow:record.row};};
-  const initialRows=[2,4,6,8,10],initialQueryRows={6:13,8:16};
+  const eyeName=p=>p.side===null?'教学新增':`眼别编码 ${p.side}`;
+  const fromSource=record=>{const v=record.values;return{key:`${v[0]}:${v[1]}:${v[2]}`,id:String(v[0]),side:v[1],label:`ID${v[0]} /E${v[1]}${v[2]===1?'':` /V${v[2]}`}`,x:v[CFG.xIndex],y:v[CFG.yIndex],originalX:v[CFG.xIndex],originalY:v[CFG.yIndex],sourceRow:record.row};};
+  const initialRows=CFG.initialRows,initialQueryRows=CFG.queryRows;
   const lookup=r=>SOURCE.rows.find(d=>d.row===r);
-  let points=initialRows.map(r=>fromSource(lookup(r))),query=fromSource(lookup(13)),queryPreset='6';
+  let points=initialRows.map(r=>fromSource(lookup(r))),query=fromSource(lookup(initialQueryRows[6])),queryPreset='6';
   let stats=engine.compute(points),mode='raw',selectedCalc='mean',newCount=0;
   let view=null,drag=null,lastSize='',noticeTimer;
   const graph=$('graph');
@@ -22,7 +23,7 @@
   function notify(text){$('notice').textContent=text;$('notice').classList.add('visible');clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>$('notice').classList.remove('visible'),3500);}
   function isOriginalSubset(){return points.length===5&&points.every((p,i)=>p.sourceRow===initialRows[i]&&p.x===p.originalX&&p.y===p.originalY);}
   function renderData(){
-    $('editable-data').innerHTML=points.map((p,i)=>`<tr><td title="${esc(p.id)} · ${p.side==='right'?'右眼':p.side==='left'?'左眼':'教学新增'}">${esc(p.label)}</td><td><input type="number" step="0.1" data-index="${i}" data-axis="x" value="${p.x}" class="${p.x!==p.originalX?'edited':''}" aria-label="${esc(p.label)} X"></td><td><input type="number" step="0.1" data-index="${i}" data-axis="y" value="${p.y}" class="${p.y!==p.originalY?'edited':''}" aria-label="${esc(p.label)} Y"></td><td><button class="remove-row" data-remove="${i}" aria-label="移除 ${esc(p.label)}" ${points.length<=2?'disabled':''}>×</button></td></tr>`).join('');
+    $('editable-data').innerHTML=points.map((p,i)=>`<tr><td title="${esc(p.id)} · ${eyeName(p)}">${esc(p.label)}</td><td><input type="number" step="0.1" data-index="${i}" data-axis="x" value="${p.x}" class="${p.x!==p.originalX?'edited':''}" aria-label="${esc(p.label)} X"></td><td><input type="number" step="0.1" data-index="${i}" data-axis="y" value="${p.y}" class="${p.y!==p.originalY?'edited':''}" aria-label="${esc(p.label)} Y"></td><td><button class="remove-row" data-remove="${i}" aria-label="移除 ${esc(p.label)}" ${points.length<=2?'disabled':''}>×</button></td></tr>`).join('');
   }
   function updateStats({rebuild=false,fit=false}={}){
     stats=engine.compute(points);
@@ -41,15 +42,16 @@
     updateQueryUI();
     if(fit||!view)fitView();else drawGraph();
     if(!$('calculation-panel').hidden)renderCalculation();
+    window.dispatchEvent(new Event('oct:datachange'));
   }
   function updateQueryUI(){
     $('query-x').value=query.x;$('query-y').value=query.y;
     const extra=$('query-preset').querySelector('[value="source"]');if(extra)extra.remove();
-    if(query.sourceRow&&![13,16].includes(query.sourceRow)){const option=document.createElement('option');option.value='source';option.textContent=`原表 ${query.id} · ${query.side==='right'?'右眼':'左眼'}`;$('query-preset').appendChild(option);queryPreset='source';}
+    if(query.sourceRow&&!Object.values(initialQueryRows).includes(query.sourceRow)){const option=document.createElement('option');option.value='source';option.textContent=`原表 ${query.id} · ${eyeName(query)}`;$('query-preset').appendChild(option);queryPreset='source';}
     $('query-preset').value=queryPreset;
     const d=stats.distance(query);
     $('distance-stats').innerHTML=`<div class="distance-row"><div><div class="distance-name">欧氏距离 / μm</div><div class="distance-value">${f4(d.euclidean)}</div></div><div><div class="distance-name">马氏距离 D</div><div class="distance-value">${f4(d.md)}</div></div></div>${stats.positive?'':'<p class="warning-value">S 不可逆，普通马氏距离在此不可计算。</p>'}`;
-    $('query-provenance').textContent=query.sourceRow?`${query.id} · ${query.side==='right'?'右眼':'左眼'} · 原表第 ${query.sourceRow} 行`:'自定义演示点，非论文原始观测';
+    $('query-provenance').textContent=query.sourceRow?`${query.id} · ${eyeName(query)} · 原表第 ${query.sourceRow} 行`:'自定义演示点，非论文原始观测';
   }
   function customQuery(x,y){query={id:'自定义点',label:'待测点',side:null,sourceRow:null,x,y};queryPreset='custom';}
 
@@ -87,7 +89,7 @@
     if(layers.mean)svg+=`<path d="M${mc[0]},${mc[1]-5}L${mc[0]+5},${mc[1]}L${mc[0]},${mc[1]+5}L${mc[0]-5},${mc[1]}Z" fill="#4778b1"/><text x="${mc[0]+9}" y="${mc[1]+16}" font-size="11" fill="#6486a8" pointer-events="none">均值</text>`;
     points.forEach((p,i)=>{const xy=screen(coord(p)),editable=mode==='raw'||mode==='centered';svg+=`<g><circle cx="${xy[0]}" cy="${xy[1]}" r="14" fill="transparent" data-point="${i}" class="${editable?'draggable':''}"/><circle cx="${xy[0]}" cy="${xy[1]}" r="5.5" fill="#22846e" stroke="#fff" stroke-width="1.5" data-point="${i}" class="${editable?'draggable':''}"><title>${esc(p.label)}：X=${f2(p.x)}，Y=${f2(p.y)}${p.sourceRow?'；原表第'+p.sourceRow+'行':''}</title></circle><text x="${xy[0]+10}" y="${xy[1]-10}" font-size="11" fill="#548271" pointer-events="none">${esc(p.label)}</text></g>`;});
     if(layers.query){const xy=screen(coord(query)),d=stats.distance(query);svg+=`<line x1="${mc[0]}" y1="${mc[1]}" x2="${xy[0]}" y2="${xy[1]}" stroke="#dc7d3c" stroke-width="1.6" opacity=".65" pointer-events="none"/><circle cx="${xy[0]}" cy="${xy[1]}" r="16" fill="transparent" data-query="true" class="draggable"/><circle cx="${xy[0]}" cy="${xy[1]}" r="7" fill="#dc7d3c" stroke="#fff" stroke-width="2" data-query="true" class="draggable"><title>${esc(query.label)}：X=${f2(query.x)}，Y=${f2(query.y)}；马氏距离=${f4(d.md)}</title></circle><text x="${xy[0]+13}" y="${xy[1]-12}" font-size="12" fill="#b56b38" pointer-events="none">${esc(query.sourceRow?query.label:'待测点')} · D=${f4(d.md)}</text>`;}
-    const xlabel={raw:'X · 全局 RNFL（μm）',centered:'X − X̄（μm）',principal:'z₁（μm）',white:'w₁'}[mode],ylabel={raw:'Y · PMB RNFL（μm）',centered:'Y − Ȳ（μm）',principal:'z₂（μm）',white:'w₂'}[mode];
+    const xlabel={raw:'X · 全局 RNFL（μm）',centered:'X − X̄（μm）',principal:'z₁（μm）',white:'w₁'}[mode],ylabel={raw:'Y · GCIPL（μm）',centered:'Y − Ȳ（μm）',principal:'z₂（μm）',white:'w₂'}[mode];
     svg+=`</g><text x="${w-18}" y="${h-51}" text-anchor="end" font-size="11" fill="#879ca8" pointer-events="none">${xlabel}</text><text x="18" y="81" font-size="11" fill="#879ca8" pointer-events="none">${ylabel}</text></svg>`;
     graph.innerHTML=svg;
   }
@@ -103,7 +105,7 @@
     if(!drag)return;const r=graph.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top;
     if(drag.type==='pan'){view.x=drag.initialView.x-(px-drag.startX)/view.scale;view.y=drag.initialView.y+(py-drag.startY)/view.scale;drawGraph();return;}
     const p=uncoord(world(px,py),drag.s,drag.m),x=Math.round(p.x*10)/10,y=Math.round(p.y*10)/10;
-    if(drag.type==='query'){customQuery(x,y);updateQueryUI();drawGraph();if(!$('calculation-panel').hidden)renderCalculation();}
+    if(drag.type==='query'){customQuery(x,y);updateQueryUI();drawGraph();window.dispatchEvent(new Event('oct:datachange'));if(!$('calculation-panel').hidden)renderCalculation();}
     else{points[drag.index].x=x;points[drag.index].y=y;updateStats({rebuild:true});}
   });
   function stopDrag(){drag=null;graph.classList.remove('dragging');}
@@ -117,24 +119,28 @@
   $('editable-data').addEventListener('change',e=>{if(e.target.matches('input.invalid')){notify('请填入有限数值，空白不作为 0 参与运算。');}});
   $('editable-data').addEventListener('click',e=>{const el=e.target.closest('[data-remove]');if(!el||points.length<=2)return;points.splice(Number(el.dataset.remove),1);updateStats({rebuild:true});});
   $('add-point').addEventListener('click',()=>{newCount++;points.push({key:`custom-${newCount}`,id:`教学新增-${newCount}`,label:`演示 ${newCount}`,x:Math.round((stats.mean[0]+8)*10)/10,y:Math.round((stats.mean[1]-5)*10)/10,originalX:null,originalY:null,sourceRow:null,side:null});updateStats({rebuild:true,fit:true});notify('已添加教学演示观测，可直接编辑数值。');});
-  $('reset').addEventListener('click',()=>{points=initialRows.map(r=>fromSource(lookup(r)));query=fromSource(lookup(13));queryPreset='6';$('query-x').classList.remove('invalid');$('query-y').classList.remove('invalid');updateStats({rebuild:true,fit:true});notify('已恢复 5 条原始参照记录与 Patient-6 待测点。');});
-  $('query-preset').addEventListener('change',e=>{queryPreset=e.target.value;if(queryPreset==='custom')customQuery(query.x,query.y);else if(queryPreset!=='source')query=fromSource(lookup(initialQueryRows[queryPreset]));$('query-x').classList.remove('invalid');$('query-y').classList.remove('invalid');updateQueryUI();drawGraph();if(!$('calculation-panel').hidden)renderCalculation();});
-  ['x','y'].forEach(axis=>$('query-'+axis).addEventListener('input',e=>{const value=e.target.valueAsNumber;e.target.classList.toggle('invalid',!Number.isFinite(value));if(!Number.isFinite(value))return;customQuery(axis==='x'?value:query.x,axis==='y'?value:query.y);$('query-preset').value='custom';const d=stats.distance(query);$('distance-stats').innerHTML=`<div class="distance-row"><div><div class="distance-name">欧氏距离 / μm</div><div class="distance-value">${f4(d.euclidean)}</div></div><div><div class="distance-name">马氏距离 D</div><div class="distance-value">${f4(d.md)}</div></div></div>${stats.positive?'':'<p class="warning-value">S 不可逆，普通马氏距离在此不可计算。</p>'}`;$('query-provenance').textContent='自定义演示点，非论文原始观测';drawGraph();if(!$('calculation-panel').hidden)renderCalculation();}));
+  $('reset').addEventListener('click',()=>{points=initialRows.map(r=>fromSource(lookup(r)));query=fromSource(lookup(initialQueryRows[6]));queryPreset='6';$('query-x').classList.remove('invalid');$('query-y').classList.remove('invalid');updateStats({rebuild:true,fit:true});notify('已恢复 5 条原始参照记录与 ID6 待测点。');});
+  $('query-preset').addEventListener('change',e=>{queryPreset=e.target.value;if(queryPreset==='custom')customQuery(query.x,query.y);else if(queryPreset!=='source')query=fromSource(lookup(initialQueryRows[queryPreset]));$('query-x').classList.remove('invalid');$('query-y').classList.remove('invalid');updateQueryUI();drawGraph();window.dispatchEvent(new Event('oct:datachange'));if(!$('calculation-panel').hidden)renderCalculation();});
+  ['x','y'].forEach(axis=>$('query-'+axis).addEventListener('input',e=>{const value=e.target.valueAsNumber;e.target.classList.toggle('invalid',!Number.isFinite(value));if(!Number.isFinite(value))return;customQuery(axis==='x'?value:query.x,axis==='y'?value:query.y);$('query-preset').value='custom';const d=stats.distance(query);$('distance-stats').innerHTML=`<div class="distance-row"><div><div class="distance-name">欧氏距离 / μm</div><div class="distance-value">${f4(d.euclidean)}</div></div><div><div class="distance-name">马氏距离 D</div><div class="distance-value">${f4(d.md)}</div></div></div>${stats.positive?'':'<p class="warning-value">S 不可逆，普通马氏距离在此不可计算。</p>'}`;$('query-provenance').textContent='自定义演示点，非论文原始观测';drawGraph();window.dispatchEvent(new Event('oct:datachange'));if(!$('calculation-panel').hidden)renderCalculation();}));
 
   function exportCSV(){const csvCell=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const rows=[['Record','Eye','X_um','Y_um','Original_source_row','Edited_or_simulated'],...points.map(p=>[p.id,p.side,p.x,p.y,p.sourceRow,p.x!==p.originalX||p.y!==p.originalY?'yes':'no'])];const blob=new Blob(['\ufeff'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='OCT-teaching-current-data.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   $('export-data').addEventListener('click',exportCSV);
 
   function showMetadata(){renderMetadata();$('metadata-dialog').showModal();}
   $('metadata-open').addEventListener('click',showMetadata);
+  let metadataPage=0;
   function renderMetadata(){
     const all=$('metadata-scope').value==='all',full=$('metadata-columns').value==='all';
-    const records=all?SOURCE.rows:SOURCE.rows.filter(r=>[...initialRows,13,16].includes(r.row));
-    const indices=full?SOURCE.headers.map((_,i)=>i):[0,1,2,3,4,5,6,7,8,9,10,11];
-    const aliases={0:'匿名编号',1:'眼别',2:'性别',3:'年龄 / 岁',4:'病程 / 月',5:'视力',6:'MS 类型',7:'EDSS',8:'既往 ON',9:'VEP',10:'全局 RNFL / μm',11:'PMB / μm'};
-    $('metadata-table').innerHTML=`<table class="metadata-table"><thead><tr>${['原表行号',...indices.map(i=>esc(full?SOURCE.headers[i]:aliases[i])),'操作'].map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${records.map(r=>{const v=r.values,valid=Number.isFinite(v[10])&&Number.isFinite(v[11]);return row([r.row,...indices.map(i=>esc(v[i])),`<button data-source-query="${r.row}" ${valid?'':'disabled'}>作为待测点</button><button data-source-add="${r.row}" ${valid?'':'disabled'}>加入参照</button>`]);}).join('')}</tbody></table>`;
+    const records=all?SOURCE.rows:SOURCE.rows.filter(r=>[...initialRows,...Object.values(initialQueryRows)].includes(r.row));
+    const pages=Math.max(1,Math.ceil(records.length/50));metadataPage=Math.max(0,Math.min(metadataPage,pages-1));
+    const indices=full?SOURCE.headers.map((_,i)=>i):CFG.clinicalIndices;
+    $('metadata-page-label').textContent=`${records.length} 条记录 · 第 ${metadataPage+1} / ${pages} 页`;
+    $('metadata-prev').disabled=metadataPage===0;$('metadata-next').disabled=metadataPage===pages-1;
+    $('metadata-table').innerHTML=`<table class="metadata-table"><thead><tr>${['原表行号',...indices.map(i=>esc(full?SOURCE.headers[i]:CFG.clinicalAliases[i])),'操作'].map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${records.slice(metadataPage*50,(metadataPage+1)*50).map(r=>{const v=r.values,valid=Number.isFinite(v[CFG.xIndex])&&Number.isFinite(v[CFG.yIndex]);return row([r.row,...indices.map(i=>esc(v[i])),`<button data-source-query="${r.row}" ${valid?'':'disabled'}>作为待测点</button><button data-source-add="${r.row}" ${valid?'':'disabled'}>加入参照</button>`]);}).join('')}</tbody></table>`;
   }
-  $('metadata-scope').addEventListener('change',renderMetadata);$('metadata-columns').addEventListener('change',renderMetadata);
-  $('metadata-table').addEventListener('click',e=>{const queryButton=e.target.closest('[data-source-query]'),addButton=e.target.closest('[data-source-add]');if(queryButton){query=fromSource(lookup(Number(queryButton.dataset.sourceQuery)));queryPreset=query.sourceRow===13?'6':query.sourceRow===16?'8':'custom';updateQueryUI();drawGraph();if(!$('calculation-panel').hidden)renderCalculation();$('metadata-dialog').close();notify(`已选 ${query.id} ${query.side==='right'?'右眼':'左眼'} 为待测点。`);}if(addButton){const p=fromSource(lookup(Number(addButton.dataset.sourceAdd)));if(points.some(d=>d.key===p.key)){notify('这条原始记录已经在当前参照样本中。');return;}points.push(p);updateStats({rebuild:true,fit:true});notify(`已加入 ${p.label}。同一受试者双眼用于推断时需处理相关性。`);}});
+  ['metadata-scope','metadata-columns'].forEach(id=>$(id).addEventListener('change',()=>{metadataPage=0;renderMetadata();}));
+  $('metadata-prev').addEventListener('click',()=>{metadataPage--;renderMetadata();});$('metadata-next').addEventListener('click',()=>{metadataPage++;renderMetadata();});
+  $('metadata-table').addEventListener('click',e=>{const queryButton=e.target.closest('[data-source-query]'),addButton=e.target.closest('[data-source-add]');if(queryButton){query=fromSource(lookup(Number(queryButton.dataset.sourceQuery)));queryPreset=query.sourceRow===initialQueryRows[6]?'6':query.sourceRow===initialQueryRows[8]?'8':'custom';updateQueryUI();drawGraph();window.dispatchEvent(new Event('oct:datachange'));if(!$('calculation-panel').hidden)renderCalculation();$('metadata-dialog').close();notify(`已选 ${query.id} ${eyeName(query)} 为待测点。`);}if(addButton){const p=fromSource(lookup(Number(addButton.dataset.sourceAdd)));if(points.some(d=>d.key===p.key)){notify('这条原始记录已经在当前参照样本中。');return;}points.push(p);updateStats({rebuild:true,fit:true});notify(`已加入 ${p.label}。重复访次或双眼用于推断时需处理相关性。`);}});
   $('help-open').addEventListener('click',()=>$('help-dialog').showModal());$('sources-link').addEventListener('click',e=>{e.preventDefault();$('help-dialog').showModal();});
   document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>$(b.dataset.close).close()));
   $('fullscreen').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{notify('当前环境未允许全屏。可以收起左侧面板放大画布。');}});
@@ -155,7 +161,7 @@
       html=`<h3>1. 对每一个离差平方</h3>${table(['观测','dₓ','dₓ²','dᵧ','dᵧ²'],points.map((p,i)=>[labels[i],f4(dx[i]),f4(dx[i]**2),f4(dy[i]),f4(dy[i]**2)]),['合计',f4(sum(dx)),f4(s.scatter[0]),f4(sum(dy)),f4(s.scatter[2])])}<h3>2. 离差平方和除以 n − 1</h3>${eq(`n = ${s.n}，分母 n − 1 = ${s.df}<br>s²ₓ = (${signed(dx.map(v=>v*v))}) / ${s.df}<br>= ${f6(s.scatter[0])} / ${s.df} = <strong>${f6(s.a)} μm²</strong><br>s²ᵧ = (${signed(dy.map(v=>v*v))}) / ${s.df}<br>= ${f6(s.scatter[2])} / ${s.df} = <strong>${f6(s.c)} μm²</strong>`)}<h3>3. 开平方得到标准差</h3>${eq(`sₓ = √${f6(s.a)} = <strong>${f6(Math.sqrt(s.a))} μm</strong><br>sᵧ = √${f6(s.c)} = <strong>${f6(Math.sqrt(s.c))} μm</strong>`)}${note('本画布统一使用样本方差和样本协方差，分母始终是 n − 1。')}`;
     }else if(selectedCalc==='covariance'){
       const products=dx.map((v,i)=>v*dy[i]);
-      html=`<h3>1. 同一条观测的两列离差相乘</h3>${table(['观测','dₓ','dᵧ','dₓdᵧ'],points.map((p,i)=>[labels[i],f4(dx[i]),f4(dy[i]),f4(products[i])]),['合计',f4(sum(dx)),f4(sum(dy)),f4(s.scatter[1])])}${eq(`Cov(X,Y) = (${signed(products)}) / ${s.df}<br>= ${f6(s.scatter[1])} / ${s.df} = <strong>${f6(s.b)} μm²</strong>`)}<h3>2. 对角线为方差，非对角线为协方差</h3><div class="calc-matrix-line">S = ${matrix(s.S.map(r=>r.map(f4)))}</div><h3>3. 同样的计算写成矩阵乘法</h3><div class="calc-matrix-line">中心化矩阵 C = ${matrix(s.centered.map(r=>r.map(f2)))}</div><div class="calc-matrix-line">CᵀC = ${matrix([[f4(s.scatter[0]),f4(s.scatter[1])],[f4(s.scatter[1]),f4(s.scatter[2])]])}</div>${eq(`S = CᵀC / ${s.df}`)}<h3>4. 换成无量纲相关系数</h3>${eq(`r = Cov(X,Y) / (sₓsᵧ)<br>= ${f6(s.b)} / (${f6(Math.sqrt(s.a))} × ${f6(Math.sqrt(s.c))})<br>= <strong>${f6(s.correlation)}</strong>`)}${note('正协方差表示同向变化的样本贡献占优。PMB 与全局 RNFL 有整体与局部的联系；不把这种相关直接解释成因果。')}`;
+      html=`<h3>1. 同一条观测的两列离差相乘</h3>${table(['观测','dₓ','dᵧ','dₓdᵧ'],points.map((p,i)=>[labels[i],f4(dx[i]),f4(dy[i]),f4(products[i])]),['合计',f4(sum(dx)),f4(sum(dy)),f4(s.scatter[1])])}${eq(`Cov(X,Y) = (${signed(products)}) / ${s.df}<br>= ${f6(s.scatter[1])} / ${s.df} = <strong>${f6(s.b)} μm²</strong>`)}<h3>2. 对角线为方差，非对角线为协方差</h3><div class="calc-matrix-line">S = ${matrix(s.S.map(r=>r.map(f4)))}</div><h3>3. 同样的计算写成矩阵乘法</h3><div class="calc-matrix-line">中心化矩阵 C = ${matrix(s.centered.map(r=>r.map(f2)))}</div><div class="calc-matrix-line">CᵀC = ${matrix([[f4(s.scatter[0]),f4(s.scatter[1])],[f4(s.scatter[1]),f4(s.scatter[2])]])}</div>${eq(`S = CᵀC / ${s.df}`)}<h3>4. 换成无量纲相关系数</h3>${eq(`r = Cov(X,Y) / (sₓsᵧ)<br>= ${f6(s.b)} / (${f6(Math.sqrt(s.a))} × ${f6(Math.sqrt(s.c))})<br>= <strong>${f6(s.correlation)}</strong>`)}${note('正协方差表示同向变化的样本贡献占优。pRNFL 与 GCIPL 是不同位置的视网膜结构指标；这组记录的相关不代表因果。')}`;
     }else if(selectedCalc==='eigen'){
       const gap=Math.hypot(s.a-s.c,2*s.b),r1=Math.abs(s.b)>1e-10?(s.eigen[0]-s.a)/s.b:null,r2=Math.abs(s.b)>1e-10?(s.eigen[1]-s.a)/s.b:null;
       html=`<h3>1. 解特征方程 det(S − λI) = 0</h3><div class="calc-matrix-line">${matrix([[f4(s.a)+' − λ',f4(s.b)],[f4(s.b),f4(s.c)+' − λ']])}的行列式为 0</div>${eq(`(${f4(s.a)} − λ)(${f4(s.c)} − λ) − (${f4(s.b)})² = 0<br>λ² − ${f6(s.trace)} λ + ${f6(s.det)} = 0<br>λ = [${f6(s.trace)} ± √(${f6(s.trace)}² − 4 × ${f6(s.det)})] / 2<br>= (${f6(s.trace)} ± ${f6(gap)}) / 2<br><strong>λ₁ = ${f6(s.eigen[0])}；λ₂ = ${f6(s.eigen[1])}</strong>`)}<h3>2. 解 (S − λI)q = 0，并令向量长度为 1</h3>${r1===null?note('协方差接近 0，本例可直接沿原坐标方向选择单位特征向量。'):eq(`对 λ₁：(${f6(s.a-s.eigen[0])})u + (${f6(s.b)})v = 0<br>v/u = (λ₁ − ${f4(s.a)}) / (${f4(s.b)}) = ${f6(r1)}<br>(1, ${f6(r1)}) 的长度为 ${f6(Math.hypot(1,r1))}<br>对 λ₂：v/u = ${f6(r2)}；(1, ${f6(r2)}) 的长度为 ${f6(Math.hypot(1,r2))}`)}<div class="calc-matrix-line">q₁ = ${matrix(s.q1.map(v=>[f6(v)]))}q₂ = ${matrix(s.q2.map(v=>[f6(v)]))}</div>${eq(`q₁ᵀq₂ = ${f6(s.q1[0]*s.q2[0]+s.q1[1]*s.q2[1])}<br>q₁ᵀq₁ = ${f6(s.q1[0]**2+s.q1[1]**2)}；q₂ᵀq₂ = ${f6(s.q2[0]**2+s.q2[1]**2)}`)}<h3>3. 组成 S = QΛQᵀ</h3><div class="calc-matrix-line">Q = ${matrix([[f6(s.q1[0]),f6(s.q2[0])],[f6(s.q1[1]),f6(s.q2[1])]])}</div><div class="calc-matrix-line">Λ = ${matrix([[f6(s.eigen[0]),'0'],['0',f6(s.eigen[1])]])}</div><div class="calc-matrix-line">λ₁q₁q₁ᵀ = ${matrix([[s.eigen[0]*s.q1[0]**2,s.eigen[0]*s.q1[0]*s.q1[1]],[s.eigen[0]*s.q1[0]*s.q1[1],s.eigen[0]*s.q1[1]**2]].map(r=>r.map(f4)))}</div><div class="calc-matrix-line">λ₂q₂q₂ᵀ = ${matrix([[s.eigen[1]*s.q2[0]**2,s.eigen[1]*s.q2[0]*s.q2[1]],[s.eigen[1]*s.q2[0]*s.q2[1],s.eigen[1]*s.q2[1]**2]].map(r=>r.map(f4)))}</div><div class="calc-matrix-line">两项相加 = S = ${matrix(s.S.map(r=>r.map(f4)))}</div>${eq(`第一主轴方差占比 = ${f6(s.eigen[0])} / ${f6(s.trace)} = ${s.trace>0?fmt(s.eigen[0]/s.trace*100,4)+'%':'—'}<br>主轴标准差：√λ₁ = ${f6(s.sd[0])}；√λ₂ = ${f6(s.sd[1])}`)}${note('特征向量的正负号可以整体翻转，主轴和距离不变。重特征值时，主轴方向可不唯一。')}`;
