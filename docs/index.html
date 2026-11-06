@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="类似 Desmos 的可操作统计画布：展示真实 OCT 数据和元数据表，拖动数据点，实时查看均值、协方差、特征值分解与马氏距离。">
+  <meta name="theme-color" content="#f7f9fa">
+  <title>OCT 统计画布</title>
+  <link rel="stylesheet" href="lab.css">
+</head>
+<body>
+  <header class="app-header"><div class="wordmark"><span class="mark">∑</span><h1>OCT <span>统计画布</span></h1><span class="header-tag">交互演示</span></div><div class="header-actions"><button id="metadata-open">原始数据 / 元数据</button><button id="reset">恢复原始样本</button><button id="fullscreen" aria-label="切换全屏">全屏</button><button id="help-open" aria-label="查看来源与使用说明">?</button></div></header>
+  <div class="app-body">
+    <aside class="expression-panel" aria-label="数据、统计量与图层">
+      <div class="panel-heading"><span>数据与统计量</span><span id="data-state" class="state-tag">论文原始子集</span></div>
+      <details class="expression" open><summary><span class="expression-num">1</span><strong>数据表</strong><span class="summary-right" id="sample-count">n = 5</span></summary><div class="expression-content"><div class="data-table-wrap"><table class="data-table"><thead><tr><th>观测</th><th>X / μm</th><th>Y / μm</th><th><span class="sr-only">移除</span></th></tr></thead><tbody id="editable-data"></tbody></table></div><div class="table-actions"><button id="add-point">＋ 添加观测</button><button id="export-data">导出 CSV</button></div><p class="micro">X：全局平均 RNFL；Y：乳斑束 PMB。编辑的是教学副本。</p></div></details>
+      <details class="expression" open><summary><span class="expression-num">2</span><strong>均值、方差</strong><button class="formula-button" data-calc="mean" type="button">计算</button></summary><div class="expression-content"><div id="mean-stats" class="stats-values"></div><div class="layer-row"><label><input type="checkbox" id="layer-mean" checked><span class="swatch mean"></span>均值中心</label><button class="text-button" data-calc="variance">方差每一步 ↗</button></div></div></details>
+      <details class="expression" open><summary><span class="expression-num">3</span><strong>协方差矩阵</strong><button class="formula-button" data-calc="covariance" type="button">计算</button></summary><div class="expression-content"><div id="covariance-matrix"></div><div class="layer-row"><label><input type="checkbox" id="layer-ellipse" checked><span class="swatch ellipse"></span>马氏等距椭圆</label><span class="micro">D = 1、2</span></div></div></details>
+      <details class="expression"><summary><span class="expression-num">4</span><strong>特征值分解</strong><button class="formula-button" data-calc="eigen" type="button">计算</button></summary><div class="expression-content"><div id="eigen-stats"></div><div class="layer-row"><label><input type="checkbox" id="layer-axes" checked><span class="swatch eigen"></span>特征向量方向</label><button class="text-button" data-calc="projection">投影 / 白化 ↗</button></div></div></details>
+      <details class="expression" open><summary><span class="expression-num">5</span><strong>马氏距离</strong><button class="formula-button" data-calc="distance" type="button">计算</button></summary><div class="expression-content"><div class="query-toolbar"><select id="query-preset" aria-label="选择待测观测"><option value="6">真实 Patient-6 · 右眼</option><option value="8">真实 Patient-8 · 右眼</option><option value="custom">自定义演示点</option></select><label class="query-visible"><input id="layer-query" type="checkbox" checked>显示</label></div><div class="coordinate-inputs"><label>X<input id="query-x" type="number" step="0.1" aria-label="待测点 X"></label><label>Y<input id="query-y" type="number" step="0.1" aria-label="待测点 Y"></label></div><div id="distance-stats"></div><p class="micro" id="query-provenance"></p></div></details>
+      <p class="panel-foot">样本方差分母 n − 1。<br>参照样本与待测点分别设置。<a href="#" id="sources-link">来源与解释范围 ↗</a></p>
+    </aside>
+    <main class="graph-workspace" aria-label="可拖动与缩放的散点图">
+      <div class="graph-toolbar"><label>坐标<select id="coordinate-mode"><option value="raw">原始坐标</option><option value="centered">中心化坐标</option><option value="principal">主轴坐标</option><option value="white">白化坐标</option></select></label><span class="mode-note" id="coordinate-note">原始测量 · μm</span><button id="toggle-panel" aria-label="折叠数据面板">收起面板</button></div>
+      <div id="graph" class="graph" tabindex="0" aria-label="交互散点图：可拖动样本点和待测点；滚轮缩放；空白处拖动平移"></div>
+      <div class="graph-help" id="graph-help">拖动点改变数值 · 拖动空白平移 · 滚轮缩放</div><div class="graph-controls"><button id="zoom-in" aria-label="放大">＋</button><button id="zoom-out" aria-label="缩小">−</button><button id="fit-view" aria-label="适应所有数据">⌂</button></div>
+      <div class="graph-bottom"><div class="legend"><span><i class="dot samples"></i>参照样本</span><span><i class="dot query"></i>待测点</span><span><i class="dot mean"></i>均值</span></div><span id="graph-message">5 条参照记录 · 5 位患者</span></div>
+    </main>
+    <aside id="calculation-panel" class="calculation-panel" hidden aria-label="逐步数值计算"><div class="drawer-header"><div><span class="micro">当前数据 · 完整数值</span><h2 id="calculation-title"></h2></div><button id="calculation-close" aria-label="关闭计算面板">×</button></div><div class="calc-tabs" id="calculation-tabs"></div><div class="calculation-content" id="calculation-content"></div></aside>
+  </div>
+  <dialog id="metadata-dialog" class="metadata-dialog"><div class="dialog-header"><div><p class="micro">Laible et al. · PLOS ONE · 2016 · S1 Dataset</p><h2>原始数据与元数据</h2></div><button data-close="metadata-dialog" aria-label="关闭元数据表">×</button></div><div class="metadata-controls"><label>范围<select id="metadata-scope"><option value="teaching">教学使用的 7 条记录</option><option value="all">原始附件全部 149 条记录</option></select></label><label>列<select id="metadata-columns"><option value="clinical">临床元数据与两个厚度指标</option><option value="all">完整 25 列</option></select></label><a href="source-data.xlsx" download>下载原始 XLSX ↗</a></div><div class="metadata-scroll" id="metadata-table"></div><p class="dialog-foot">此表保留论文原始记录，空白显示为 —。左侧教学副本的修改不会写入此表。可从完整观测中选取待测点或加入参照。</p></dialog>
+  <dialog id="help-dialog" class="help-dialog"><div class="dialog-header"><h2>使用与来源</h2><button data-close="help-dialog" aria-label="关闭来源说明">×</button></div><div class="help-content"><p>左侧修改表格，或在原始 / 中心化视图拖动样本点；统计量与图形会同步更新。滚轮缩放，拖动空白处平移；点击各项“计算”可展开全部数值步骤。</p><p>“原始数据 / 元数据”展示原始附件，可切换全部记录和完整 25 列。白化与马氏距离需要协方差矩阵可逆；条件不满足时会明确显示原因。</p><h3>论文</h3><p>Laible M, Jarius S, Mackensen F, et al. <i>Adding Papillomacular Bundle Measurements to Standard Optical Coherence Tomography Does Not Increase Sensitivity to Detect Prior Optic Neuritis in Patients with Multiple Sclerosis.</i> PLOS ONE. 2016;11(5):e0155322.</p><p><a href="https://doi.org/10.1371/journal.pone.0155322" target="_blank" rel="noopener">论文与 S1 Dataset ↗</a> · <a href="source-data.xlsx" download>原始数据 ↗</a></p><p>默认参照为 Patient-1—5 的右眼，原表第 2、4、6、8、10 行；X、Y 分别为 K、L 列。默认待测点 Patient-6、8 右眼在第 13、16 行，未参与默认参照估计。</p><h3>解释条件</h3><p>默认只有 5 个教学样本，包含不同 ON 史，不能构成健康参考范围。PMB 与全局 RNFL 存在整体与局部的关系；协方差不代表因果，零协方差不保证独立。距离等值线不自动表示置信水平或患病概率。加入同一个人的双眼进行推断时，需处理眼间相关。</p><p>数值运算保留完整精度，显示时四舍五入。原始数据保持不变；拖动、编辑和新增的记录会标为教学修改。原文与数据按其开放许可署名使用。</p></div></dialog>
+  <div id="notice" class="notice" role="status" aria-live="polite"></div>
+  <script src="original-data.js"></script><script src="statistics.js"></script><script src="lab.js"></script>
+</body>
+</html>
