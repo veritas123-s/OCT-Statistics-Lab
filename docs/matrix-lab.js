@@ -7,6 +7,27 @@
   const lab=window.OCT_LAB,parent=document.querySelector('.graph-workspace');
   let state={center:1,angle:0,sx:1,sy:1},past=[{...state}],historyIndex=0,lastPreset='center';
   let selectedPoint='query',lastSignature=JSON.stringify(lab.points),view=null,panning=null,active=true;
+  let animation=null;
+  function stopAnimation(){if(animation){cancelAnimationFrame(animation.frame);const done=animation.resolve;animation=null;done(false);}}
+  function animateTo(next,{duration=700,record=true,presetName=null}={}){
+    stopAnimation();lastPreset=presetName;
+    const start={...state},began=performance.now();
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches)duration=0;
+    return new Promise(resolve=>{
+      const task={resolve,frame:0};animation=task;
+      function frame(now){
+        if(animation!==task)return;
+        const t=duration>0?Math.min(1,(now-began)/duration):1,u=t*t*(3-2*t);
+        state={center:start.center+(next.center-start.center)*u,angle:start.angle+(next.angle-start.angle)*u,
+          sx:Math.exp(Math.log(start.sx)+(Math.log(next.sx)-Math.log(start.sx))*u),
+          sy:Math.exp(Math.log(start.sy)+(Math.log(next.sy)-Math.log(start.sy))*u)};
+        if(t===1){state={...next};animation=null;if(record)commit();}
+        render();
+        if(t<1)task.frame=requestAnimationFrame(frame);else resolve(true);
+      }
+      task.frame=requestAnimationFrame(frame);
+    });
+  }
   const entry=document.createElement('button');entry.id='matrix-open';entry.className='mx-toggle';entry.textContent='矩阵实验';document.querySelector('.header-actions').prepend(entry);
   const section=document.createElement('section');section.id='matrix-workspace';section.className='matrix-workspace';section.setAttribute('aria-label','可回退的矩阵变换实验');
   section.innerHTML=`<div class="mx-top"><div><h2>矩阵变换实验 <small>Manim 几何 · 随时回退</small></h2></div><button id="mx-exit">返回散点编辑</button></div>
@@ -43,6 +64,7 @@
     4. 逆变换：<div class="calc-matrix-line">H⁻¹ = ${mat(plan.inverse)}</div>H⁻¹[p′₁,p′₂,1]ᵀ = <code>(${f(stages.recovered[0],6)}, ${f(stages.recovered[1],6)}, 1)</code>，回到原始坐标。<br>
     协方差：S′ = (DR)S(DR)ᵀ；先旋转对齐得到 diag(${f(s.eigen[0],6)}, ${f(s.eigen[1],6)})，再按主轴标准差缩放得到 I。任意手动角度下直接计算 M S Mᵀ，未把协方差强行置零。`;
     if(active){if(fit||!view)fitView();else draw();}
+    window.dispatchEvent(new Event('matrix:frame'));
   }
   function ellipseCurves(s){if(!G)return[];const B=[[s.q1[0]*s.sd[0],-s.q2[0]*s.sd[1]],[s.q1[1]*s.sd[0],-s.q2[1]*s.sd[1]]];return G.unit_circle.map(curve=>curve.map(v=>{const xy=math.apply(B,v);return{x:xy[0]+s.mean[0],y:xy[1]+s.mean[1]};}));}
   function size(){return{w:canvas.clientWidth,h:canvas.clientHeight};}
@@ -59,7 +81,7 @@
     for(let x=Math.ceil(lo[0]/tick)*tick;x<=hi[0];x+=tick){const p=screen([x,0]);svg+=`<line x1="${p[0]}" y1="0" x2="${p[0]}" y2="${h}" stroke="#edf1f4"/><text x="${p[0]+4}" y="${axisY}" fill="#9baab3" font-size="10">${f(x,dec)}</text>`;}
     for(let y=Math.ceil(lo[1]/tick)*tick;y<=hi[1];y+=tick){const p=screen([0,y]);svg+=`<line x1="0" y1="${p[1]}" x2="${w}" y2="${p[1]}" stroke="#edf1f4"/><text x="${axisX}" y="${p[1]-4}" fill="#9baab3" font-size="10">${f(y,dec)}</text>`;}
     svg+=`<line x1="0" y1="${axis[1]}" x2="${w}" y2="${axis[1]}" stroke="#bfccd3"/><line x1="${axis[0]}" y1="0" x2="${axis[0]}" y2="${h}" stroke="#bfccd3"/>`;
-    if($('mx-grid').checked){const reach=Math.max(...s.sd)*1.65,sp=nice(reach/4);for(let v=-Math.ceil(reach/sp)*sp;v<=reach;v+=sp){for(const line of[[{x:s.mean[0]-reach,y:s.mean[1]+v},{x:s.mean[0]+reach,y:s.mean[1]+v}],[{x:s.mean[0]+v,y:s.mean[1]-reach},{x:s.mean[0]+v,y:s.mean[1]+reach}]]){const a=screen(plan.map(line[0])),b=screen(plan.map(line[1]));svg+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#c5ddd1" stroke-width=".8" opacity=".7"/>`;}}}
+    if($('mx-grid').checked){const origin=screen(plan.map({x:s.mean[0],y:s.mean[1]}));for(const line of math.viewportGrid(plan.M,origin,view.scale,w,h)){const[a,b]=line.ends;svg+=`<line class="mx-lattice" data-axis="${line.axis}" data-step="${line.step}" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#b4d4c3" stroke-width=".8" opacity=".75"/>`;}}
     if($('mx-ghost').checked)svg+=`<path d="${pathFor(curves,p=>[p.x-s.mean[0],p.y-s.mean[1]])}" fill="none" stroke="#c4cdd2" stroke-dasharray="5 5" stroke-width="1.3"/>`;
     svg+=`<path d="${pathFor(curves,plan.map)}" fill="#25856e13" stroke="#22846e" stroke-width="2.2"/>`;
     const mc=screen(plan.map({x:s.mean[0],y:s.mean[1]}));
@@ -68,21 +90,21 @@
     const query=lab.query,qp=screen(plan.map(query));svg+=`<line x1="${mc[0]}" y1="${mc[1]}" x2="${qp[0]}" y2="${qp[1]}" stroke="#dc7d3c" stroke-width="1.4"/><circle cx="${qp[0]}" cy="${qp[1]}" r="6" fill="#dc7d3c" stroke="#fff"/><text x="${qp[0]+9}" y="${qp[1]-9}" fill="#b57648" font-size="11">待测点</text><circle cx="${mc[0]}" cy="${mc[1]}" r="3" fill="#4778b1"/></g><text x="${w-12}" y="${h-16}" text-anchor="end" fill="#8ea1ab" font-size="10">当前变换坐标</text></svg>`;
     canvas.innerHTML=svg;$('mx-view-label').textContent=`1 个当前坐标单位 = ${f(view.scale,2)} px · 视图缩放只改变镜头`;
   }
-  function setActive(value){active=value;section.hidden=!value;parent.classList.toggle('matrix-active',value);if(value){syncPointOptions();render({fit:true});}window.dispatchEvent(new Event('resize'));}
+  function setActive(value){if(!value)stopAnimation();active=value;section.hidden=!value;parent.classList.toggle('matrix-active',value);if(value){syncPointOptions();render({fit:true});}window.dispatchEvent(new Event('resize'));}
   entry.addEventListener('click',()=>setActive(!active));$('mx-exit').addEventListener('click',()=>setActive(false));
-  document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{lastPreset=b.dataset.preset;state=preset(lastPreset);commit();render({fit:lastPreset==='raw'||lastPreset==='center'});}));
+  document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{const name=b.dataset.preset;animateTo(preset(name),{presetName:name});}));
   for(const key of['center','angle','sx','sy']){
-    $('mx-'+key).addEventListener('input',e=>{state[key]=Number(e.target.value);lastPreset=null;render();});
+    $('mx-'+key).addEventListener('input',e=>{stopAnimation();state[key]=Number(e.target.value);lastPreset=null;render();});
     $('mx-'+key).addEventListener('change',()=>{commit();render();});
   }
   ['sx','sy'].forEach(key=>{
     const field=$('mx-'+key+'-number');let dirty=false;
-    field.addEventListener('input',e=>{dirty=true;const v=e.target.valueAsNumber;if(Number.isFinite(v)&&v>=.001&&v<=20){state[key]=v;lastPreset=null;render();}});
+    field.addEventListener('input',e=>{stopAnimation();dirty=true;const v=e.target.valueAsNumber;if(Number.isFinite(v)&&v>=.001&&v<=20){state[key]=v;lastPreset=null;render();}});
     const finish=e=>{if(!dirty){render();return;}dirty=false;const v=e.target.valueAsNumber;if(!Number.isFinite(v)||v<.001||v>20)e.target.value=f(state[key],6);else{state[key]=v;lastPreset=null;commit();}render();};
     field.addEventListener('change',finish);field.addEventListener('blur',finish);
   });
-  $('mx-undo').addEventListener('click',()=>{if(historyIndex>0){state={...past[--historyIndex]};lastPreset=null;render();}});
-  $('mx-redo').addEventListener('click',()=>{if(historyIndex<past.length-1){state={...past[++historyIndex]};lastPreset=null;render();}});
+  $('mx-undo').addEventListener('click',()=>{stopAnimation();if(historyIndex>0)animateTo({...past[--historyIndex]},{record:false});});
+  $('mx-redo').addEventListener('click',()=>{stopAnimation();if(historyIndex<past.length-1)animateTo({...past[++historyIndex]},{record:false});});
   $('mx-point').addEventListener('change',e=>{selectedPoint=e.target.value;render();});
   ['mx-grid','mx-ghost'].forEach(id=>$(id).addEventListener('change',draw));
   $('mx-fit').addEventListener('click',fitView);
@@ -92,8 +114,8 @@
   canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;panning={x:e.clientX,y:e.clientY,view:{...view}};canvas.setPointerCapture(e.pointerId);});
   canvas.addEventListener('pointermove',e=>{if(!panning)return;view.x=panning.view.x-(e.clientX-panning.x)/view.scale;view.y=panning.view.y+(e.clientY-panning.y)/view.scale;draw();});
   canvas.addEventListener('pointerup',()=>panning=null);canvas.addEventListener('pointercancel',()=>panning=null);
-  window.addEventListener('oct:datachange',()=>{const sig=JSON.stringify(lab.points);if(sig!==lastSignature){lastSignature=sig;if(lastPreset)state=preset(lastPreset);if(!lab.stats.positive&&(state.sx!==1||state.sy!==1)){state={center:1,angle:0,sx:1,sy:1};lastPreset='center';}past=[{...state}];historyIndex=0;}syncPointOptions();render();});
+  window.addEventListener('oct:datachange',()=>{stopAnimation();const sig=JSON.stringify(lab.points);if(sig!==lastSignature){lastSignature=sig;if(lastPreset)state=preset(lastPreset);if(!lab.stats.positive&&(state.sx!==1||state.sy!==1)){state={center:1,angle:0,sx:1,sy:1};lastPreset='center';}past=[{...state}];historyIndex=0;}syncPointOptions();render();});
   let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(active)fitView();},80);}).observe(canvas);
-  window.OCT_MATRIX={get state(){return{...state};},get plan(){return math.plan(lab.stats,state);},get history(){return past.map(p=>({...p}));},get historyIndex(){return historyIndex;}};
+  window.OCT_MATRIX={animateTo,setState(next){stopAnimation();state={...next};commit();render();},stop(){stopAnimation();commit();render();},get animating(){return!!animation;},get state(){return{...state};},get plan(){return math.plan(lab.stats,state);},get history(){return past.map(p=>({...p}));},get historyIndex(){return historyIndex;}};
   syncPointOptions();setActive(true);
 })();

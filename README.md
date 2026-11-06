@@ -35,7 +35,7 @@ Krämer J, Balloff C, Weise M, et al. **Evolution of retinal degeneration and pr
 
 ## Manim 与复现
 
-使用 Manim Community 0.22.1 的Circle、VMobject贝塞尔控制点和apply_matrix生成几何，实际验证平移、旋转、缩放及逆变换。网页实时对这些Manim控制点应用同一矩阵；没有预渲染视频、自动播放或用离散截图替代连续交互，也不声称浏览器运行Python。
+使用 Manim Community 0.22.1 的Circle、VMobject贝塞尔控制点和apply_matrix生成几何，实际验证平移、旋转、缩放及逆变换。网页实时对这些Manim控制点应用同一矩阵；未使用预渲染视频或离散截图替代连续交互；播放按钮逐帧演示乘法与几何变换，未声称浏览器运行Python。
 
 ```sh
 python -m pip install -r manim/requirements.txt
@@ -70,3 +70,9 @@ node verify-transcriptome.cjs验证数据总量、整数计数、实际样本和
 四组织44份文库全部接入，待测文库排除出参照，转录组坐标保持只读。逐步显示 A=RS、Sᵣ=ARᵀ、S′=DSᵣDᵀ；滑块连续更新散点、Manim椭圆与全部矩阵，支持撤销和重做。二维所选基因的可视化不替代全转录组主分析；完整结果在下载区。
 
 运行 `python manim/verify_transcriptome_geometry.py`，以四批完整logCPM矩阵核对Manim变换、37°旋转协方差、主轴对齐、白化与逆变换。最大数值误差小于2e-15。原有 `node verify-lab.cjs`、`node verify-transcriptome.cjs`继续通过；浏览器核验四组织全样本取值、计数单位、矩阵协方差、撤销重做、全量表、OCT恢复、黑色字体和390px窄屏。
+
+## 无限网格与乘法动效
+
+网格以均值为原点，按当前矩阵变换后延伸到整个视野；逆映射视口求交并裁剪直线，平移、缩放和旋转时持续覆盖，按屏幕垂直间距调整密度以限制线数。`node verify-grid.cjs`核验48种旋转、平移与极端轴向缩放，确认原格点关系、视口边界和线数上界。
+
+中心化、旋转对齐、白化、撤销与重做采用逐帧缓动，缩放按对数插值。点击“播放乘法”依次演示RS、(RS)Rᵀ、DSᵣ、(DSᵣ)Dᵀ；每格按行乘列，高亮两个乘积，数字飞向算式，结果淡入；双侧乘法阶段同步推进实际几何变换。暂停/继续保持当前进度，手动输入或切换数据中止播放。每一步完整结束时精确回到目标矩阵，几何和协方差仍由实际状态重算，未将中间值强行置零。
