@@ -9,7 +9,8 @@
   const table=(heads,rows,totals)=>`<div class="calc-table-wrap"><table class="calc-table"><thead><tr>${heads.map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(row).join('')}</tbody>${totals?`<tfoot>${row(totals)}</tfoot>`:''}</table></div>`;
   const eq=s=>`<div class="calc-equation">${s}</div>`,note=s=>`<p class="calc-note">${s}</p>`;
   const signed=values=>values.map((v,i)=>`${i?(v<0?' − ':' + '):(v<0?'−':'')}${f2(Math.abs(v))}`).join('');
-  const eyeName=p=>p.side===null?'教学新增':`眼别编码 ${p.side}`;
+  let externalContext=null,externalSnapshot=null;
+  const eyeName=p=>p.origin==='transcriptome'?'组织文库':p.side===null?'教学新增':`眼别编码 ${p.side}`;
   const fromSource=record=>{const v=record.values;return{key:`${v[0]}:${v[1]}:${v[2]}`,id:String(v[0]),side:v[1],label:`ID${v[0]} /E${v[1]}${v[2]===1?'':` /V${v[2]}`}`,x:v[CFG.xIndex],y:v[CFG.yIndex],originalX:v[CFG.xIndex],originalY:v[CFG.yIndex],sourceRow:record.row};};
   const initialRows=CFG.initialRows,initialQueryRows=CFG.queryRows;
   const lookup=r=>SOURCE.rows.find(d=>d.row===r);
@@ -29,16 +30,17 @@
     stats=engine.compute(points);
     if(mode==='white'&&!stats.positive){mode='principal';$('coordinate-mode').value=mode;view=null;notify('协方差矩阵不可逆，已切换为主轴坐标。');}
     if(rebuild)renderData();
-    const original=isOriginalSubset();$('data-state').textContent=original?'论文原始子集':'教学参照已修改';$('data-state').classList.toggle('modified',!original);
+    const original=isOriginalSubset();$('data-state').textContent=externalContext?externalContext.title:original?'论文原始子集':'教学参照已修改';$('data-state').classList.toggle('modified',!original&&!externalContext);
     $('sample-count').textContent=`n = ${points.length}`;
-    $('mean-stats').innerHTML=[['X̄',stats.mean[0],'μm'],['Ȳ',stats.mean[1],'μm'],['s²ₓ',stats.a,'μm²'],['s²ᵧ',stats.c,'μm²']].map(([label,v,unit])=>`<div><div class="stat-label">${label}</div><div class="stat-number">${f4(v)}<small>${unit}</small></div></div>`).join('');
+    const unit=externalContext?.unit||'μm';
+    $('mean-stats').innerHTML=[['X̄',stats.mean[0],unit],['Ȳ',stats.mean[1],unit],['s²ₓ',stats.a,unit+'²'],['s²ᵧ',stats.c,unit+'²']].map(([label,v,unit])=>`<div><div class="stat-label">${label}</div><div class="stat-number">${f4(v)}<small>${unit}</small></div></div>`).join('');
     $('covariance-matrix').innerHTML=`<div class="matrix-line">S = ${matrix(stats.S.map(r=>r.map(f2)))}</div><p class="matrix-note">r = ${f4(stats.correlation)} · 分母 n − 1 = ${stats.df}</p>`;
     $('eigen-stats').innerHTML=`<div class="eigen-line"><div>λ₁<b>${f4(stats.eigen[0])}</b></div><div>λ₂<b>${f4(stats.eigen[1])}</b></div></div><p class="vector-line">q₁ = (${f4(stats.q1[0])}, ${f4(stats.q1[1])})<br>q₂ = (${f4(stats.q2[0])}, ${f4(stats.q2[1])})</p>`;
     $('coordinate-mode').querySelector('[value="white"]').disabled=!stats.positive;
     $('coordinate-note').textContent={raw:'原始测量 · μm',centered:'每个点减去均值 · μm',principal:'投影到特征向量方向 · μm',white:'各主轴除以标准差 · 无量纲'}[mode];
     $('graph-help').textContent=mode==='raw'||mode==='centered'?'拖动点改变数值 · 拖动空白平移 · 滚轮缩放':'拖动待测点 · 拖动空白平移 · 滚轮缩放';
     const patientIDs=points.filter(p=>p.sourceRow).map(p=>p.id),unique=new Set(patientIDs).size;
-    $('graph-message').textContent=`${points.length} 条参照记录${patientIDs.length===points.length?` · ${unique} 位受试者`:''}${unique<patientIDs.length?' · 含双眼':''}`;
+    $('graph-message').textContent=externalContext?`${externalContext.title} · 参照 n=${points.length}`:`${points.length} 条参照记录${patientIDs.length===points.length?` · ${unique} 位受试者`:''}${unique<patientIDs.length?' · 含双眼':''}`;
     updateQueryUI();
     if(fit||!view)fitView();else drawGraph();
     if(!$('calculation-panel').hidden)renderCalculation();
@@ -51,7 +53,7 @@
     $('query-preset').value=queryPreset;
     const d=stats.distance(query);
     $('distance-stats').innerHTML=`<div class="distance-row"><div><div class="distance-name">欧氏距离 / μm</div><div class="distance-value">${f4(d.euclidean)}</div></div><div><div class="distance-name">马氏距离 D</div><div class="distance-value">${f4(d.md)}</div></div></div>${stats.positive?'':'<p class="warning-value">S 不可逆，普通马氏距离在此不可计算。</p>'}`;
-    $('query-provenance').textContent=query.sourceRow?`${query.id} · ${eyeName(query)} · 原表第 ${query.sourceRow} 行`:'自定义演示点，非论文原始观测';
+    $('query-provenance').textContent=externalContext?query.label:query.sourceRow?`${query.id} · ${eyeName(query)} · 原表第 ${query.sourceRow} 行`:'自定义演示点，非论文原始观测';
   }
   function customQuery(x,y){query={id:'自定义点',label:'待测点',side:null,sourceRow:null,x,y};queryPreset='custom';}
 
@@ -89,7 +91,7 @@
     if(layers.mean)svg+=`<path d="M${mc[0]},${mc[1]-5}L${mc[0]+5},${mc[1]}L${mc[0]},${mc[1]+5}L${mc[0]-5},${mc[1]}Z" fill="#4778b1"/><text x="${mc[0]+9}" y="${mc[1]+16}" font-size="11" fill="#6486a8" pointer-events="none">均值</text>`;
     points.forEach((p,i)=>{const xy=screen(coord(p)),editable=mode==='raw'||mode==='centered';svg+=`<g><circle cx="${xy[0]}" cy="${xy[1]}" r="14" fill="transparent" data-point="${i}" class="${editable?'draggable':''}"/><circle cx="${xy[0]}" cy="${xy[1]}" r="5.5" fill="#22846e" stroke="#fff" stroke-width="1.5" data-point="${i}" class="${editable?'draggable':''}"><title>${esc(p.label)}：X=${f2(p.x)}，Y=${f2(p.y)}${p.sourceRow?'；原表第'+p.sourceRow+'行':''}</title></circle><text x="${xy[0]+10}" y="${xy[1]-10}" font-size="11" fill="#548271" pointer-events="none">${esc(p.label)}</text></g>`;});
     if(layers.query){const xy=screen(coord(query)),d=stats.distance(query);svg+=`<line x1="${mc[0]}" y1="${mc[1]}" x2="${xy[0]}" y2="${xy[1]}" stroke="#dc7d3c" stroke-width="1.6" opacity=".65" pointer-events="none"/><circle cx="${xy[0]}" cy="${xy[1]}" r="16" fill="transparent" data-query="true" class="draggable"/><circle cx="${xy[0]}" cy="${xy[1]}" r="7" fill="#dc7d3c" stroke="#fff" stroke-width="2" data-query="true" class="draggable"><title>${esc(query.label)}：X=${f2(query.x)}，Y=${f2(query.y)}；马氏距离=${f4(d.md)}</title></circle><text x="${xy[0]+13}" y="${xy[1]-12}" font-size="12" fill="#b56b38" pointer-events="none">${esc(query.sourceRow?query.label:'待测点')} · D=${f4(d.md)}</text>`;}
-    const xlabel={raw:'X · 全局 RNFL（μm）',centered:'X − X̄（μm）',principal:'z₁（μm）',white:'w₁'}[mode],ylabel={raw:'Y · GCIPL（μm）',centered:'Y − Ȳ（μm）',principal:'z₂（μm）',white:'w₂'}[mode];
+    const xlabel=externalContext?externalContext.xLabel:{raw:'X · 全局 RNFL（μm）',centered:'X − X̄（μm）',principal:'z₁（μm）',white:'w₁'}[mode],ylabel=externalContext?externalContext.yLabel:{raw:'Y · GCIPL（μm）',centered:'Y − Ȳ（μm）',principal:'z₂（μm）',white:'w₂'}[mode];
     svg+=`</g><text x="${w-18}" y="${h-51}" text-anchor="end" font-size="11" fill="#879ca8" pointer-events="none">${xlabel}</text><text x="18" y="81" font-size="11" fill="#879ca8" pointer-events="none">${ylabel}</text></svg>`;
     graph.innerHTML=svg;
   }
@@ -172,11 +174,18 @@
       const d=s.distance(query);
       html=`<h3>1. 选择待测点，固定当前参照统计量</h3>${eq(`p = (${f4(query.x)}, ${f4(query.y)})<br>参照均值 p̄ = (${f4(s.mean[0])}, ${f4(s.mean[1])})<br>δ = p − p̄ = (${f4(d.delta[0])}, ${f4(d.delta[1])})<br>欧氏距离 = √[(${f4(d.delta[0])})² + (${f4(d.delta[1])})²] = ${f6(d.euclidean)} μm`)}<h3>2. 计算逆协方差矩阵</h3>${eq(`det(S) = ${f6(s.a)} × ${f6(s.c)} − (${f6(s.b)})²<br>= <strong>${f6(s.det)}</strong>`)}${s.positive?`<div class="calc-matrix-line">S⁻¹ = 1 / ${f6(s.det)} × ${matrix([[f4(s.c),f4(-s.b)],[f4(-s.b),f4(s.a)]])}</div><div class="calc-matrix-line">= ${matrix(s.inv.map(r=>r.map(f6)))}</div><h3>3. 直接相乘 D² = δᵀS⁻¹δ</h3>${eq(`(S⁻¹δ)₁ = (${f6(s.inv[0][0])}) × (${f4(d.delta[0])}) + (${f6(s.inv[0][1])}) × (${f4(d.delta[1])}) = ${f6(d.v[0])}<br>(S⁻¹δ)₂ = (${f6(s.inv[1][0])}) × (${f4(d.delta[0])}) + (${f6(s.inv[1][1])}) × (${f4(d.delta[1])}) = ${f6(d.v[1])}<br>D² = (${f4(d.delta[0])}) × (${f6(d.v[0])}) + (${f4(d.delta[1])}) × (${f6(d.v[1])})<br>= <strong>${f6(d.d2)}</strong><br>D = √${f6(d.d2)} = <strong>${f6(d.md)}</strong>`)}<h3>4. 用主轴与白化坐标复算</h3>${eq(`z₁ = (${f6(s.q1[0])}) × (${f4(d.delta[0])}) + (${f6(s.q1[1])}) × (${f4(d.delta[1])}) = ${f6(d.z[0])}<br>z₂ = (${f6(s.q2[0])}) × (${f4(d.delta[0])}) + (${f6(s.q2[1])}) × (${f4(d.delta[1])}) = ${f6(d.z[1])}<br>w₁ = ${f6(d.z[0])} / ${f6(s.sd[0])} = ${f6(d.w[0])}<br>w₂ = ${f6(d.z[1])} / ${f6(s.sd[1])} = ${f6(d.w[1])}<br>D² = z₁² / λ₁ + z₂² / λ₂<br>= ${f6(d.z[0]**2)} / ${f6(s.eigen[0])} + ${f6(d.z[1]**2)} / ${f6(s.eigen[1])}<br>= ${f6(d.w[0]**2)} + ${f6(d.w[1]**2)} = <strong>${f6(d.d2)}</strong><br>D = √(w₁² + w₂²) = <strong>${f6(d.md)}</strong>`)}${note('这就是白化空间中到原点的欧氏距离。等价地 S⁻¹ = Q diag(1/λ₁, 1/λ₂) Qᵀ，沿小方差方向的偏离权重更大。')}`:note('该协方差矩阵在数值上不可逆。当前不能使用普通逆矩阵计算马氏距离；请调整参照观测，使两维不完全共线。')}${note('马氏距离无量纲。它依赖当前参照样本，不直接等于异常概率、诊断或严重程度；椭圆 D = 1、2 没有自动的置信水平含义。')}`;
     }
+    if(externalContext)html=html.replaceAll('μm',esc(externalContext.unit)).replace('pRNFL 与 GCIPL 是不同位置的视网膜结构指标；这组记录的相关不代表因果。','当前两基因的相关不代表因果。');
     $('calculation-content').innerHTML=html;
   }
 
   let resizeTimer;const onResize=()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{const{w,h}=dimensions();if(lastSize!==`${w}:${h}`)fitView();},70);};
   window.addEventListener('resize',onResize);new ResizeObserver(onResize).observe(graph);
-  window.OCT_LAB={get points(){return points.map(p=>({...p}));},get stats(){return stats;},get query(){return{...query};},get mode(){return mode;}};
+  function loadExternal(config){
+    if(!config||config.points.length<2||config.points.some(p=>!Number.isFinite(p.x)||!Number.isFinite(p.y))||!Number.isFinite(config.query.x)||!Number.isFinite(config.query.y))throw Error('至少需要两份完整参照');
+    externalSnapshot=JSON.parse(JSON.stringify(config));externalContext={title:config.title,unit:config.unit,xLabel:config.xLabel,yLabel:config.yLabel};points=config.points.map(p=>({...p,origin:'transcriptome',originalX:p.x,originalY:p.y,side:null,sourceRow:null}));query={...config.query,origin:'transcriptome',side:null,sourceRow:null};queryPreset='custom';mode='raw';$('coordinate-mode').value='raw';document.body.classList.add('rna-mode');updateStats({rebuild:true,fit:true});
+    $('editable-data').querySelectorAll('input').forEach(el=>el.readOnly=true);['query-x','query-y'].forEach(id=>$(id).readOnly=true);
+  }
+  function restoreOCT(){externalContext=null;externalSnapshot=null;document.body.classList.remove('rna-mode');points=initialRows.map(r=>fromSource(lookup(r)));query=fromSource(lookup(initialQueryRows[6]));queryPreset='6';['query-x','query-y'].forEach(id=>{$(id).readOnly=false;$(id).classList.remove('invalid');});updateStats({rebuild:true,fit:true});}
+  window.OCT_LAB={loadExternal,restoreOCT,get context(){return externalContext?{...externalContext}:null;},get points(){return points.map(p=>({...p}));},get stats(){return stats;},get query(){return{...query};},get mode(){return mode;}};
   updateStats({rebuild:true,fit:true});
 })();
